@@ -30,7 +30,7 @@
   .papel { --bg:var(--papel); }
 
   * { box-sizing:border-box; margin:0; padding:0; }
-  html { scroll-behavior:smooth; }
+  html.lenis, html.lenis body { height:auto; }
   body { font-family:var(--sans); font-size:16px; line-height:1.65; color:var(--texto); background:var(--creme); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   img { display:block; max-width:100%; }
   a { color:inherit; }
@@ -79,11 +79,11 @@
   .palco { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
 
   /* ---------- 1. Abertura ---------- */
-  .abertura { height:230vh; }
+  .abertura { height:280vh; }
   .abertura .palco { background:radial-gradient(120% 90% at 78% 30%, #284462 0%, var(--navy) 55%, var(--navy-3) 100%); }
   .abertura .rede { position:absolute; inset:0; width:100%; height:100%; opacity:calc(.6 - var(--p) * .6); }
   .abertura .simbolo { position:absolute; right:calc(var(--gut) + 2vw); top:50%; width:min(40vw, 520px);
-    transform:translateY(-50%) scale(calc(1 + var(--p) * 4.5)); transform-origin:60% 45%; opacity:calc(.13 - var(--p) * .1); }
+    transform:translate3d(0, -50%, 0) scale(calc(1 + var(--p) * 4)); transform-origin:60% 45%; opacity:calc(.13 - var(--p) * .1); will-change:transform, opacity; }
   .abertura .masthead { position:absolute; top:88px; left:0; right:0; opacity:calc(1 - var(--p) * 5); }
   .abertura .masthead .g > div { grid-column:1 / -1; display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,.5); border-bottom:var(--fio); padding:10px 0; }
   .abertura .conteudo { opacity:calc(1 - var(--p) * 4.2); transform:translateY(calc(var(--p) * -60px)); }
@@ -106,21 +106,19 @@
   .sumario p { font-size:14px; color:var(--sutil); }
 
   /* ---------- 3. Núcleo Científico ---------- */
-  .intro { height:210vh; }
+  .intro { height:250vh; }
   .intro .frase { grid-column:1 / 11; font-family:var(--serif); font-size:clamp(28px, 3.9vw, 50px); line-height:1.2; color:var(--fg); margin-top:44px; letter-spacing:-.01em; }
-  .intro .frase .w { opacity:.14; transition:opacity .3s; }
-  .intro .frase .w.on { opacity:1; }
+  .intro .frase .w { opacity:calc(.14 + var(--t, 0) * .86); }
   .intro .eixo { grid-column:1 / -1; margin-top:52px; display:grid; grid-template-columns:repeat(3, 1fr); position:relative; }
   .intro .eixo::after { content:""; position:absolute; top:5px; left:0; right:0; height:1px; background:var(--rule); }
-  .intro .eixo::before { content:""; position:absolute; top:5px; left:0; height:1px; background:var(--acento); width:calc(var(--linha-eixo, 0) * 100%); transition:width .4s; z-index:1; }
-  .intro .etapa-eixo { position:relative; z-index:2; opacity:.3; transition:opacity .5s; }
-  .intro .etapa-eixo.on { opacity:1; }
+  .intro .eixo::before { content:""; position:absolute; top:5px; left:0; height:1px; background:var(--acento); width:calc(var(--linha-eixo, 0) * 100%); z-index:1; }
+  .intro .etapa-eixo { position:relative; z-index:2; opacity:calc(.3 + var(--t, 0) * .7); transform:translate3d(0, calc((1 - var(--t, 0)) * 14px), 0); }
   .intro .etapa-eixo.on .no { background:var(--acento); }
   .intro .etapa-eixo .rotulo { display:block; margin-top:16px; color:var(--acento); }
   .intro .etapa-eixo span:last-child { font-family:var(--serif); font-size:20px; color:var(--fg); }
 
   /* ---------- 4. Programas (molde único) ---------- */
-  .programa { height:300vh; }
+  .programa { height:360vh; }
   .programa .palco { justify-content:center; padding-top:64px; }
   .programa .cab { margin-bottom:clamp(28px, 5vh, 56px); }
   .programa .lado { grid-column:1 / 6; align-self:start; }
@@ -128,17 +126,17 @@
   .programa .chapeu { margin-top:24px; }
   .programa .medidor { margin-top:36px; display:flex; align-items:center; gap:14px; }
   .programa .medidor .trilho { flex:1; max-width:220px; height:1px; background:var(--rule); position:relative; }
-  .programa .medidor .trilho i { position:absolute; inset:0 auto 0 0; width:calc(var(--p) * 100%); background:var(--acento); }
+  .programa .medidor .trilho i { position:absolute; inset:0 auto 0 0; width:calc(var(--enchimento, 0) * 100%); background:var(--acento); }
   .programa .medidor .num { font-family:var(--serif); font-size:14px; color:var(--acento); min-width:42px; }
 
   /* Via: a sequência de etapas como um axônio com nós */
   .via { grid-column:7 / -1; list-style:none; position:relative; align-self:start; }
   .via::before, .via::after { content:""; position:absolute; left:5px; top:10px; width:1px; }
   .via::before { bottom:10px; background:var(--rule); }
-  .via::after { height:calc(var(--enchimento, 0) * (100% - 20px)); background:var(--acento); transition:height .5s cubic-bezier(.2,.7,.2,1); }
-  .passo { position:relative; padding:0 0 clamp(18px, 3.2vh, 30px) 40px; opacity:.28; transition:opacity .6s; }
-  .passo .no { position:absolute; left:0; top:7px; z-index:1; transition:background .4s, transform .4s; }
-  .passo.on { opacity:1; }
+  .via::after { height:calc(var(--enchimento, 0) * (100% - 20px)); background:var(--acento); }
+  .passo { position:relative; padding:0 0 clamp(18px, 3.2vh, 30px) 40px; opacity:calc(.25 + var(--t, 0) * .75); }
+  .passo .cabeca-passo, .passo p { transform:translate3d(calc((1 - var(--t, 0)) * 28px), 0, 0); }
+  .passo .no { position:absolute; left:0; top:7px; z-index:1; transition:background .5s, transform .5s; }
   .passo.on .no { background:var(--acento); transform:scale(1.15); }
   .passo .cabeca-passo { display:flex; align-items:baseline; gap:12px; }
   .passo .cabeca-passo .num { font-family:var(--serif); font-size:14px; color:var(--acento); }
@@ -151,10 +149,11 @@
   .cultural .lado { grid-column:1 / 6; margin-top:48px; }
   .cultural .chapeu { margin-top:24px; }
   .cultural .via { margin-top:56px; }
+  .cultural .passo { --t:1; }
   .cultural .passo .no { background:var(--acento); }
   .cultural .passo.rv { opacity:0; }
   .cultural .passo.rv.on { opacity:1; }
-  .citacao { height:190vh; }
+  .citacao { height:220vh; }
   .citacao figure { grid-column:2 / 12; text-align:center; transform:scale(calc(.86 + var(--p) * .2)); opacity:calc(var(--p) * 3.2); }
   .citacao blockquote { font-family:var(--serif); font-weight:500; font-size:clamp(34px, 5.6vw, 78px); line-height:1.08; color:var(--fg); letter-spacing:-.015em; }
   .citacao blockquote i { font-weight:400; color:var(--acento); }
@@ -397,6 +396,7 @@
 
 </main>
 
+<script src="assets/lenis.min.js"></script>
 <script>
 (function () {
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -411,45 +411,78 @@
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   });
 
-  var cenas = Array.prototype.slice.call(document.querySelectorAll('.cena'));
-  function liga(lista, fracao) {
-    var n = Math.round(Math.max(0, Math.min(1, fracao)) * lista.length);
-    for (var i = 0; i < lista.length; i++) lista[i].classList.toggle('on', i < n);
-    return n;
+  if (reduz) {
+    document.querySelectorAll('.passo, .etapa-eixo, .w').forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
+    document.querySelectorAll('.via').forEach(function (v) { v.style.setProperty('--enchimento', 1); });
+    document.querySelectorAll('[data-contador]').forEach(function (el) { el.textContent = '4/4'; });
+    return;
   }
+
+  function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+  function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
+
+  // Distribui o avanço f (0..1) por uma lista: cada item tem seu próprio --t contínuo.
+  function espalha(lista, f, largura) {
+    var n = lista.length, w = largura || 1.6, acesos = 0;
+    for (var i = 0; i < n; i++) {
+      var t = suave((f * (n + w - 1) - i) / w);
+      lista[i].style.setProperty('--t', t.toFixed(3));
+      lista[i].classList.toggle('on', t > .5);
+      if (t > .5) acesos++;
+    }
+    return acesos;
+  }
+
+  var cenas = Array.prototype.slice.call(document.querySelectorAll('.cena')).map(function (c) {
+    return { el: c, passos: c.querySelectorAll('.passo'), via: c.querySelector('.via'), cont: c.querySelector('[data-contador]'),
+             palavras: c.querySelectorAll('.w'), eixo: c.querySelector('.eixo'), etapas: c.querySelectorAll('.etapa-eixo'),
+             prog: c.classList.contains('programa'), intro: c.classList.contains('intro'), ultimo: -1 };
+  });
 
   function quadro() {
     var vh = innerHeight, y = scrollY;
     raiz.style.setProperty('--rolagem', (y / Math.max(1, raiz.scrollHeight - vh)).toFixed(4));
     topo.classList.toggle('solido', y > vh * .5);
-    cenas.forEach(function (c) {
-      var curso = c.offsetHeight - vh;
-      var p = curso > 0 ? Math.min(1, Math.max(0, -c.getBoundingClientRect().top / curso)) : 0;
-      c.style.setProperty('--p', p.toFixed(4));
-      if (c.classList.contains('programa')) {
-        var passos = c.querySelectorAll('.passo');
-        var n = liga(passos, p * 1.3 + .04);
-        c.querySelector('.via').style.setProperty('--enchimento', n <= 1 ? 0 : (n - 1) / (passos.length - 1));
-        c.querySelector('[data-contador]').textContent = n + '/' + passos.length;
+    cenas.forEach(function (s) {
+      var r = s.el.getBoundingClientRect();
+      var curso = s.el.offsetHeight - vh;
+      var p = curso > 0 ? lim(-r.top / curso) : 0;
+      if (Math.abs(p - s.ultimo) < .0005) return;
+      s.ultimo = p;
+      s.el.style.setProperty('--p', p.toFixed(4));
+      if (s.prog) {
+        var f = lim((p - .04) / .82);
+        var n = espalha(s.passos, f, 1.4);
+        s.via.style.setProperty('--enchimento', lim(f * 1.08).toFixed(4));
+        s.cont.textContent = n + '/' + s.passos.length;
       }
-      if (c.classList.contains('intro')) {
-        liga(c.querySelectorAll('.w'), p * 1.6);
-        var k = liga(c.querySelectorAll('.etapa-eixo'), (p - .55) * 2.6);
-        c.querySelector('.eixo').style.setProperty('--linha-eixo', k <= 1 ? 0 : (k - 1) / 3 + .02);
+      if (s.intro) {
+        espalha(s.palavras, lim(p / .6), 3);
+        var g = lim((p - .58) / .36);
+        espalha(s.etapas, g, 1.2);
+        s.eixo.style.setProperty('--linha-eixo', (g * .72).toFixed(4));
       }
     });
   }
-  if (reduz) {
-    document.querySelectorAll('.passo, .etapa-eixo, .w').forEach(function (el) { el.classList.add('on'); });
-    document.querySelectorAll('.via').forEach(function (v) { v.style.setProperty('--enchimento', 1); });
-    document.querySelectorAll('[data-contador]').forEach(function (el) { el.textContent = '4/4'; });
-    return;
+
+  // Rolagem com inércia; sem a biblioteca, a rolagem nativa continua funcionando.
+  if (window.Lenis) {
+    var lenis = new Lenis({ lerp: .075, wheelMultiplier: .85, smoothWheel: true });
+    lenis.on('scroll', quadro);
+    (function loop(t) { lenis.raf(t); requestAnimationFrame(loop); })(performance.now());
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var alvo = document.querySelector(a.getAttribute('href'));
+        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 2.2 }); }
+      });
+    });
+  } else {
+    var pendente = false;
+    addEventListener('scroll', function () {
+      if (!pendente) { pendente = true; requestAnimationFrame(function () { pendente = false; quadro(); }); }
+    }, { passive: true });
   }
-  var pendente = false;
-  addEventListener('scroll', function () {
-    if (!pendente) { pendente = true; requestAnimationFrame(function () { pendente = false; quadro(); }); }
-  }, { passive: true });
-  addEventListener('resize', quadro);
+  addEventListener('resize', function () { cenas.forEach(function (s) { s.ultimo = -1; }); quadro(); });
   quadro();
 })();
 </script>
