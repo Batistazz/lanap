@@ -27,8 +27,10 @@
     --fio:1px solid var(--rule);
     --bg:var(--creme); --fg:var(--navy); --corpo:var(--texto); --sutil:var(--cinza); --rule:var(--linha); --acento:var(--teal);
   }
-  .escuro { --bg:var(--navy); --fg:#fff; --corpo:rgba(255,255,255,.82); --sutil:rgba(255,255,255,.55); --rule:rgba(255,255,255,.16); --acento:var(--teal-claro); }
-  .papel { --bg:var(--papel); }
+  html:not(.cores) .escuro { --bg:var(--navy); --fg:#fff; --corpo:rgba(255,255,255,.82); --sutil:rgba(255,255,255,.55); --rule:rgba(255,255,255,.16); --acento:var(--teal-claro); }
+  html:not(.cores) .papel { --bg:var(--papel); }
+  html.cores body { background:var(--bg); }
+  html.cores section { background:transparent; }
 
   * { box-sizing:border-box; margin:0; padding:0; }
   html.lenis, html.lenis body { height:auto; }
@@ -222,7 +224,7 @@
 <main>
 
 <!-- 1. Abertura -->
-<section class="abertura escuro" id="inicio">
+<section class="abertura escuro" data-tema="escuro" id="inicio">
   <div class="palco">
     <svg class="rede" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g stroke="rgba(92,196,201,.22)" stroke-width="1" fill="none">
@@ -252,7 +254,7 @@
 </section>
 
 <!-- 2. Sumário -->
-<section class="sumario papel">
+<section class="sumario papel" data-tema="papel">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo">Sumário</span><span class="sep"></span><span class="rotulo">Quatro eixos</span></div>
     <ol>
@@ -265,7 +267,7 @@
 </section>
 
 <!-- 3. Núcleo Científico -->
-<section class="intro" id="cientifico">
+<section class="intro" data-tema="claro" id="cientifico">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Núcleo Científico</span><span class="sep"></span><span class="rotulo">Programas 01–03</span></div>
     <p class="frase" data-palavras>O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica, em um percurso contínuo.</p>
@@ -278,7 +280,7 @@
 </section>
 
 <!-- 4a. Formativo -->
-<section class="programa papel" id="formativo">
+<section class="programa papel" data-tema="papel" id="formativo">
   <div class="g">
     <div class="cab" data-in><span class="num">01</span><span class="rotulo ac">Formação</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -296,7 +298,7 @@
 </section>
 
 <!-- 4b. Imersivo -->
-<section class="programa escuro" id="imersivo">
+<section class="programa escuro" data-tema="escuro" id="imersivo">
   <div class="g">
     <div class="cab" data-in><span class="num">02</span><span class="rotulo ac">Prática</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -314,7 +316,7 @@
 </section>
 
 <!-- 4c. Produção Científica -->
-<section class="programa" id="producao">
+<section class="programa" data-tema="claro" id="producao">
   <div class="g">
     <div class="cab" data-in><span class="num">03</span><span class="rotulo ac">Pesquisa</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -332,7 +334,7 @@
 </section>
 
 <!-- 5. Núcleo Cultural -->
-<section class="cultural papel" id="cultural">
+<section class="cultural papel" data-tema="papel" id="cultural">
   <div class="g">
     <div class="cab" data-in><span class="num">04</span><span class="rotulo ac">Comunidade</span><span class="sep"></span><span class="rotulo">Instituído em setembro de 2026</span></div>
     <div class="lado" data-in="zoom">
@@ -345,7 +347,7 @@
     </ol>
   </div>
 </section>
-<section class="citacao papel">
+<section class="citacao papel" data-tema="papel">
   <div class="g">
     <figure data-in="zoom">
       <blockquote>Ciência e comunidade <i>orientam uma à outra.</i></blockquote>
@@ -355,7 +357,7 @@
 </section>
 
 <!-- 6. Convite -->
-<section class="convite escuro" id="convite">
+<section class="convite escuro" data-tema="escuro" id="convite">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
     <h2 class="titulo" data-in="zoom">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
@@ -402,8 +404,31 @@
   function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
 
+
+  // Transição gradual de cores entre seções: interpola o tema no meio da tela.
+  var temas = {
+    claro:  { bg:[246,242,234], fg:[31,51,76], corpo:[47,59,72], sutil:[107,118,132], rule:[217,210,196], acento:[13,118,125] },
+    papel:  { bg:[251,249,245], fg:[31,51,76], corpo:[47,59,72], sutil:[107,118,132], rule:[217,210,196], acento:[13,118,125] },
+    escuro: { bg:[31,51,76], fg:[255,255,255], corpo:[215,219,224], sutil:[154,163,174], rule:[67,83,104], acento:[92,196,201] }
+  };
+  var secoesTema = Array.prototype.slice.call(document.querySelectorAll('section[data-tema]'));
+  raiz.classList.add('cores');
+  function mistura(a, b, t) { return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }).join(',') + ')'; }
+  function cores() {
+    var meio = innerHeight * .55, atual = 0;
+    for (var i = 0; i < secoesTema.length; i++) if (secoesTema[i].getBoundingClientRect().top <= meio) atual = i;
+    var s = secoesTema[atual], r = s.getBoundingClientRect(), prox = secoesTema[Math.min(atual + 1, secoesTema.length - 1)];
+    var zona = Math.min(innerHeight * .9, r.height * .6);
+    var t = suave((meio - (r.bottom - zona)) / zona);
+    var A = temas[s.dataset.tema], B = temas[prox.dataset.tema];
+    // Fundo e fios mudam devagar; o texto troca rápido perto do meio, para não ficar cinza sobre cinza.
+    var tFundo = suave(suave(t)), tTexto = suave((t - .47) / .06);
+    for (var k in A) raiz.style.setProperty('--' + k, mistura(A[k], B[k], (k === 'bg' || k === 'rule') ? tFundo : tTexto));
+  }
+
   function quadro() {
     var vh = innerHeight, y = scrollY;
+    cores();
     raiz.style.setProperty('--rolagem', (y / Math.max(1, raiz.scrollHeight - vh)).toFixed(4));
     topo.classList.toggle('solido', y > vh * .5);
 
