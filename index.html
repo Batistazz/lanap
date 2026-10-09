@@ -27,17 +27,19 @@
     --fio:1px solid var(--rule);
     --bg:var(--creme); --fg:var(--navy); --corpo:var(--texto); --sutil:var(--cinza); --rule:var(--linha); --acento:var(--teal);
   }
-  html:not(.cores) .escuro { --bg:var(--navy); --fg:#fff; --corpo:rgba(255,255,255,.82); --sutil:rgba(255,255,255,.55); --rule:rgba(255,255,255,.16); --acento:var(--teal-claro); }
-  html:not(.cores) .papel { --bg:var(--papel); }
-  html.cores body { background:var(--bg); }
-  html.cores section { background:transparent; }
+  .escuro { --bg:var(--navy); --fg:#fff; --corpo:rgba(255,255,255,.82); --sutil:rgba(255,255,255,.55); --rule:rgba(255,255,255,.16); --acento:var(--teal-claro); }
+  .papel { --bg:var(--papel); }
 
   * { box-sizing:border-box; margin:0; padding:0; }
   html.lenis, html.lenis body { height:auto; }
-  body { font-family:var(--sans); font-size:16px; line-height:1.65; color:var(--texto); background:var(--creme); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  body { font-family:var(--sans); font-size:16px; line-height:1.65; color:var(--texto); background:var(--papel); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   img { display:block; max-width:100%; }
   a { color:inherit; }
-  section { background:var(--bg); color:var(--corpo); position:relative; }
+  section { background:transparent; color:var(--corpo); position:relative; }
+  main { position:relative; }
+  /* Camada tonal: um degradê do tamanho da página, montado uma vez a partir das seções.
+     Rola junto com o conteúdo, então a cor muda sem nenhum cálculo durante a rolagem. */
+  .tonal { position:absolute; left:0; top:0; width:100%; z-index:-1; pointer-events:none; }
 
   /* ---------- Grade e tipografia ---------- */
   .g { max-width:var(--max); margin:0 auto; padding:0 var(--gut); display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; }
@@ -95,7 +97,7 @@
   .abertura .manifesto .display { grid-column:2 / 12; font-size:clamp(34px, 5.4vw, 74px); text-align:center; }
 
   /* ---------- 2. Sumário ---------- */
-  .sumario { padding:96px 0 104px; }
+  .sumario { padding:34vh 0 104px; }
   .sumario ol { grid-column:1 / -1; list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); border-bottom:var(--fio); margin-top:48px; }
   .sumario li a { display:block; text-decoration:none; padding:26px 24px 30px 0; margin-right:24px; border-top:1px solid var(--rule); position:relative; height:100%; }
   .sumario li a::before { content:""; position:absolute; top:-6px; left:0; width:11px; height:11px; border-radius:50%; background:var(--bg); border:1.5px solid var(--acento); transition:background .3s; }
@@ -222,9 +224,10 @@
 </header>
 
 <main>
+<div class="tonal" aria-hidden="true"></div>
 
 <!-- 1. Abertura -->
-<section class="abertura escuro" data-tema="escuro" id="inicio">
+<section class="abertura escuro" data-tom="#1F334C" id="inicio">
   <div class="palco">
     <svg class="rede" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g stroke="rgba(92,196,201,.22)" stroke-width="1" fill="none">
@@ -254,7 +257,7 @@
 </section>
 
 <!-- 2. Sumário -->
-<section class="sumario papel" data-tema="papel">
+<section class="sumario" data-tom="#FBF9F5">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo">Sumário</span><span class="sep"></span><span class="rotulo">Quatro eixos</span></div>
     <ol>
@@ -267,7 +270,7 @@
 </section>
 
 <!-- 3. Núcleo Científico -->
-<section class="intro" data-tema="claro" id="cientifico">
+<section class="intro" data-tom="#F6F2EA" id="cientifico">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Núcleo Científico</span><span class="sep"></span><span class="rotulo">Programas 01–03</span></div>
     <p class="frase" data-palavras>O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica, em um percurso contínuo.</p>
@@ -280,7 +283,7 @@
 </section>
 
 <!-- 4a. Formativo -->
-<section class="programa papel" data-tema="papel" id="formativo">
+<section class="programa" data-tom="#EBF3F1" id="formativo">
   <div class="g">
     <div class="cab" data-in><span class="num">01</span><span class="rotulo ac">Formação</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -298,7 +301,7 @@
 </section>
 
 <!-- 4b. Imersivo -->
-<section class="programa escuro" data-tema="escuro" id="imersivo">
+<section class="programa" data-tom="#E6EDF2" id="imersivo">
   <div class="g">
     <div class="cab" data-in><span class="num">02</span><span class="rotulo ac">Prática</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -316,7 +319,7 @@
 </section>
 
 <!-- 4c. Produção Científica -->
-<section class="programa" data-tema="claro" id="producao">
+<section class="programa" data-tom="#F4EEE3" id="producao">
   <div class="g">
     <div class="cab" data-in><span class="num">03</span><span class="rotulo ac">Pesquisa</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -334,7 +337,7 @@
 </section>
 
 <!-- 5. Núcleo Cultural -->
-<section class="cultural papel" data-tema="papel" id="cultural">
+<section class="cultural" data-tom="#EEF4F1" id="cultural">
   <div class="g">
     <div class="cab" data-in><span class="num">04</span><span class="rotulo ac">Comunidade</span><span class="sep"></span><span class="rotulo">Instituído em setembro de 2026</span></div>
     <div class="lado" data-in="zoom">
@@ -347,7 +350,7 @@
     </ol>
   </div>
 </section>
-<section class="citacao papel" data-tema="papel">
+<section class="citacao" data-tom="#F8F5EE">
   <div class="g">
     <figure data-in="zoom">
       <blockquote>Ciência e comunidade <i>orientam uma à outra.</i></blockquote>
@@ -357,7 +360,7 @@
 </section>
 
 <!-- 6. Convite -->
-<section class="convite escuro" data-tema="escuro" id="convite">
+<section class="convite escuro" data-tom="#1F334C" id="convite">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
     <h2 class="titulo" data-in="zoom">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
@@ -382,106 +385,109 @@
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var raiz = document.documentElement, topo = document.querySelector('.topo');
   var abertura = document.querySelector('.abertura');
+  var main = document.querySelector('main'), tonal = document.querySelector('.tonal');
 
   document.querySelectorAll('[data-palavras]').forEach(function (el) {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   });
 
+  // Cada seção usa o próprio tom como --bg (os nós vazados ficam da cor do fundo).
+  var secoes = Array.prototype.slice.call(document.querySelectorAll('section[data-tom]'));
+  secoes.forEach(function (s) { s.style.setProperty('--bg', s.dataset.tom); });
+
+  // Degradê da página: cada tom domina o miolo da sua seção e se funde ao próximo na fronteira.
+  function montaTonal() {
+    var paradas = [];
+    secoes.forEach(function (s, i) {
+      var a = s.offsetTop, b = a + s.offsetHeight;
+      var funde = Math.min(s.offsetHeight * .35, innerHeight * .6);
+      if (i === 0) { paradas.push(s.dataset.tom + ' 0px', s.dataset.tom + ' ' + Math.round(b) + 'px'); return; }
+      var ultimo = i === secoes.length - 1;
+      paradas.push(s.dataset.tom + ' ' + Math.round(a + (i === 1 ? innerHeight * .3 : ultimo ? 0 : funde)) + 'px');
+      paradas.push(s.dataset.tom + ' ' + Math.round(b - (ultimo ? 0 : secoes[i + 1] === secoes[secoes.length - 1] ? funde * 1.4 : funde)) + 'px');
+    });
+    tonal.style.height = main.offsetHeight + 'px';
+    tonal.style.background = 'linear-gradient(to bottom, ' + paradas.join(', ') + ')';
+  }
+  montaTonal();
+  addEventListener('load', montaTonal);
+  if (document.fonts) document.fonts.ready.then(montaTonal);
+
   var entradas = Array.prototype.slice.call(document.querySelectorAll('[data-in]'));
   var nos = Array.prototype.slice.call(document.querySelectorAll('[data-no]'));
   var vias = Array.prototype.slice.call(document.querySelectorAll('[data-via]'));
-  var frases = Array.prototype.slice.call(document.querySelectorAll('[data-palavras]'));
-  var contadores = Array.prototype.slice.call(document.querySelectorAll('.programa'));
+  var palavras = Array.prototype.slice.call(document.querySelectorAll('.w'));
+  var frase = document.querySelector('[data-palavras]');
+  var programas = Array.prototype.slice.call(document.querySelectorAll('.programa')).map(function (s) {
+    return { el: s, via: s.querySelector('.via'), passos: s.querySelectorAll('.passo'), cont: s.querySelector('[data-contador]') };
+  });
 
   if (reduz) {
-    entradas.concat(nos).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
+    entradas.concat(nos, palavras).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
     vias.forEach(function (v) { v.style.setProperty('--enchimento', 1); });
-    document.querySelectorAll('.w').forEach(function (w) { w.style.setProperty('--t', 1); });
-    document.querySelectorAll('[data-contador]').forEach(function (el) { el.textContent = '4/4'; });
+    programas.forEach(function (p) { p.el.style.setProperty('--enchimento', 1); p.cont.textContent = '4/4'; });
     return;
   }
 
   function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
-
-
-  // Transição gradual de cores entre seções: interpola o tema no meio da tela.
-  var temas = {
-    claro:  { bg:[246,242,234], fg:[31,51,76], corpo:[47,59,72], sutil:[107,118,132], rule:[217,210,196], acento:[13,118,125] },
-    papel:  { bg:[251,249,245], fg:[31,51,76], corpo:[47,59,72], sutil:[107,118,132], rule:[217,210,196], acento:[13,118,125] },
-    escuro: { bg:[31,51,76], fg:[255,255,255], corpo:[215,219,224], sutil:[154,163,174], rule:[67,83,104], acento:[92,196,201] }
-  };
-  var secoesTema = Array.prototype.slice.call(document.querySelectorAll('section[data-tema]'));
-  raiz.classList.add('cores');
-  function mistura(a, b, t) { return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }).join(',') + ')'; }
-  function cores() {
-    var meio = innerHeight * .55, atual = 0;
-    for (var i = 0; i < secoesTema.length; i++) if (secoesTema[i].getBoundingClientRect().top <= meio) atual = i;
-    var s = secoesTema[atual], r = s.getBoundingClientRect(), prox = secoesTema[Math.min(atual + 1, secoesTema.length - 1)];
-    var zona = Math.min(innerHeight * .9, r.height * .6);
-    var t = suave((meio - (r.bottom - zona)) / zona);
-    var A = temas[s.dataset.tema], B = temas[prox.dataset.tema];
-    // Fundo e fios mudam devagar; o texto troca rápido perto do meio, para não ficar cinza sobre cinza.
-    var tFundo = suave(suave(t)), tTexto = suave((t - .47) / .06);
-    for (var k in A) raiz.style.setProperty('--' + k, mistura(A[k], B[k], (k === 'bg' || k === 'rule') ? tFundo : tTexto));
+  // Só escreve quando o valor muda: evita recálculo de estilo à toa.
+  var cache = new WeakMap();
+  function poe(el, nome, v) {
+    var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); }
+    if (m[nome] !== v) { m[nome] = v; el.style.setProperty(nome, v); }
   }
+  function marca(el, liga) { if (el.classList.contains('on') !== liga) el.classList.toggle('on', liga); }
 
   function quadro() {
     var vh = innerHeight, y = scrollY;
-    cores();
-    raiz.style.setProperty('--rolagem', (y / Math.max(1, raiz.scrollHeight - vh)).toFixed(4));
-    topo.classList.toggle('solido', y > vh * .5);
+    // 1) Leitura: todas as posições de uma vez, antes de qualquer escrita
+    var topos = entradas.map(function (el) { return el.getBoundingClientRect().top; });
+    var toposNo = nos.map(function (el) { return el.getBoundingClientRect().top; });
+    var rv = vias.map(function (v) { return v.getBoundingClientRect(); });
+    var rf = frase.getBoundingClientRect();
+    var cursoA = abertura.offsetHeight - vh, alto = raiz.scrollHeight - vh;
 
-    // Abertura: progresso da cena presa
-    var cursoA = abertura.offsetHeight - vh;
-    abertura.style.setProperty('--p', lim(y / Math.max(1, cursoA)).toFixed(4));
-
-    // Cada elemento aparece enquanto sobe de 96% até 62% da altura da tela
-    entradas.forEach(function (el) {
-      var top = el.getBoundingClientRect().top;
-      el.style.setProperty('--t', suave((vh * .96 - top) / (vh * .34)).toFixed(3));
-    });
-    // Nó acende quando a etapa cruza 60% da tela
-    nos.forEach(function (el) { el.classList.toggle('on', el.getBoundingClientRect().top < vh * .6); });
-    // Linha da via acompanha a posição de 60% da tela
-    vias.forEach(function (v) {
-      var r = v.getBoundingClientRect();
-      var tam = v.classList.contains('eixo') ? r.width : r.height;
-      var f = v.classList.contains('eixo')
-        ? lim((vh * .6 - r.top) / (vh * .3)) * .72
-        : lim((vh * .6 - r.top) / Math.max(1, r.height - 20));
-      v.style.setProperty('--enchimento', f.toFixed(4));
-    });
-    // Frase do Núcleo Científico: palavra a palavra, contínuo
-    frases.forEach(function (fr) {
-      var r = fr.getBoundingClientRect();
-      var f = lim((vh * .85 - r.top) / (vh * .55 + r.height * .5));
-      var ws = fr.querySelectorAll('.w'), n = ws.length;
-      for (var i = 0; i < n; i++) ws[i].style.setProperty('--t', suave((f * (n + 4) - i - 1) / 4).toFixed(3));
-    });
-    // Contador e medidor dos programas
-    contadores.forEach(function (sec) {
-      var via = sec.querySelector('.via');
-      var acesos = sec.querySelectorAll('.passo.on').length;
-      var c = sec.querySelector('[data-contador]');
-      if (c) c.textContent = acesos + '/' + sec.querySelectorAll('.passo').length;
-      sec.style.setProperty('--enchimento', via.style.getPropertyValue('--enchimento') || 0);
+    // 2) Escrita
+    poe(raiz, '--rolagem', (y / Math.max(1, alto)).toFixed(3));
+    if (topo.classList.contains('solido') !== (y > vh * .5)) topo.classList.toggle('solido');
+    poe(abertura, '--p', lim(y / Math.max(1, cursoA)).toFixed(3));
+    for (var i = 0; i < entradas.length; i++) {
+      if (topos[i] > vh * 1.2 || topos[i] < -vh * 2) continue;
+      poe(entradas[i], '--t', suave((vh * .96 - topos[i]) / (vh * .34)).toFixed(2));
+    }
+    for (var j = 0; j < nos.length; j++) marca(nos[j], toposNo[j] < vh * .6);
+    for (var k = 0; k < vias.length; k++) {
+      var r = rv[k], eixo = vias[k].classList.contains('eixo');
+      var f = eixo ? lim((vh * .6 - r.top) / (vh * .3)) * .72 : lim((vh * .6 - r.top) / Math.max(1, r.height - 20));
+      poe(vias[k], '--enchimento', f.toFixed(3));
+    }
+    if (rf.top < vh * 1.2 && rf.bottom > -vh) {
+      var g = lim((vh * .85 - rf.top) / (vh * .55 + rf.height * .5)), n = palavras.length;
+      for (var w = 0; w < n; w++) poe(palavras[w], '--t', suave((g * (n + 4) - w - 1) / 4).toFixed(2));
+    }
+    programas.forEach(function (p) {
+      var acesos = 0; for (var q = 0; q < p.passos.length; q++) if (p.passos[q].classList.contains('on')) acesos++;
+      var txt = acesos + '/' + p.passos.length; if (p.cont.textContent !== txt) p.cont.textContent = txt;
+      poe(p.el, '--enchimento', p.via.style.getPropertyValue('--enchimento') || '0');
     });
   }
 
-  if (window.Lenis) {
-    var lenis = new Lenis({ lerp: .12, wheelMultiplier: 1, smoothWheel: true });
-    lenis.on('scroll', quadro);
+  // Rolagem: inércia leve na roda e no trackpad; no toque fica a rolagem nativa do aparelho.
+  var lenis = window.Lenis ? new Lenis({ lerp: .14, wheelMultiplier: 1, smoothWheel: true }) : null;
+  var pedido = false;
+  function agenda() { if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
+  if (lenis) {
     (function loop(t) { lenis.raf(t); requestAnimationFrame(loop); })(performance.now());
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
         var alvo = document.querySelector(a.getAttribute('href'));
-        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 1.6 }); }
+        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 1.4 }); }
       });
     });
   }
-  addEventListener('scroll', quadro, { passive: true });
-  addEventListener('resize', quadro);
+  addEventListener('scroll', agenda, { passive: true });
+  addEventListener('resize', function () { montaTonal(); agenda(); });
   quadro();
 })();
 </script>
