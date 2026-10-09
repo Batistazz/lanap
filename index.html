@@ -158,6 +158,8 @@
   .btn { display:inline-flex; align-items:center; gap:12px; padding:15px 22px; border:1px solid var(--acento); color:var(--fg); text-decoration:none; font-size:14px; font-weight:500; letter-spacing:.02em; transition:background .3s, color .3s; }
   .btn:hover { background:var(--acento); color:var(--navy-3); }
   .btn .no { width:9px; height:9px; }
+  .contatos { display:flex; flex-direction:column; align-items:stretch; gap:10px; min-width:280px; }
+  .contatos .rotulo { margin-bottom:4px; }
   .colofao { margin-top:120px; padding:28px 0 36px; }
   .colofao .g > div { grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; border-top:var(--fio); padding-top:24px; }
   .colofao img { height:40px; width:auto; }
@@ -358,7 +360,11 @@
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
     <h2 class="titulo" data-in="zoom">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
     <p class="chapeu" data-in>A LANAP está aberta a parcerias com profissionais e serviços que compartilhem esse compromisso.</p>
-    <div class="acao" data-in><a class="btn" href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener"><span class="no"></span>Fale com a LANAP no Instagram</a></div>
+    <div class="acao contatos" data-in>
+      <span class="rotulo">Contato</span>
+      <a class="btn" href="mailto:fasehlanap@gmail.com"><span class="no"></span>fasehlanap@gmail.com</a>
+      <a class="btn" href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener"><span class="no"></span>Instagram @lanap.faseh</a>
+    </div>
   </div>
   <div class="colofao"><div class="g"><div>
     <img src="assets/logo-white.png" alt="LANAP">
