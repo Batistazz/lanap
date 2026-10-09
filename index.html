@@ -1,0 +1,222 @@
+<!doctype html>
+<!-- Site institucional da LANAP. Conteúdo: nota 55 (livreto institucional, vigente),
+     público externo (sem área de ligantes). Rascunho local, não publicado. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LANAP · Liga Acadêmica de Neurociência Aplicada</title>
+<meta name="description" content="Liga Acadêmica de Neurociência Aplicada da UniBH Vespasiano: formação, prática, pesquisa e comunidade.">
+<link rel="icon" href="assets/lanap-symbol-teal.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#1F334C; --navy-2:#172739; --teal:#0D767D; --teal-claro:#5CC4C9;
+    --creme:#F6F2EA; --papel:#FBF9F5; --linha:#DCD5C8; --texto:#34414F; --cinza:#6B7684;
+    --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans:Inter, Arial, Helvetica, sans-serif;
+    --largura:1120px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; scroll-padding-top:76px; }
+  body { font-family:var(--sans); color:var(--texto); background:var(--creme); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  img { max-width:100%; display:block; }
+  a { color:inherit; }
+  .wrap { max-width:var(--largura); margin:0 auto; padding:0 24px; }
+  .kicker { font-size:12px; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--teal); }
+  h1, h2, h3 { font-family:var(--serif); font-weight:600; color:var(--navy); line-height:1.15; }
+  h2 { font-size:clamp(30px, 4.2vw, 46px); margin-top:12px; }
+  h2 em { font-style:normal; color:var(--teal); }
+  h3 { font-size:22px; }
+  .traco { width:48px; height:2px; background:var(--teal); margin:22px 0 26px; }
+  .lead { font-size:18px; max-width:680px; }
+  section { padding:96px 0; }
+
+  /* Cabeçalho */
+  header { position:sticky; top:0; z-index:10; background:rgba(31,51,76,.96); backdrop-filter:blur(8px); }
+  header .wrap { display:flex; align-items:center; justify-content:space-between; height:68px; }
+  header .marca { display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; }
+  header .marca img { height:34px; width:auto; }
+  header .marca span { font-size:11px; letter-spacing:.22em; color:rgba(255,255,255,.7); }
+  nav { display:flex; gap:26px; }
+  nav a { color:rgba(255,255,255,.82); text-decoration:none; font-size:14px; font-weight:500; }
+  nav a:hover { color:#fff; }
+  .menu-btn { display:none; background:none; border:0; color:#fff; font-size:26px; cursor:pointer; }
+
+  /* Abertura */
+  .hero { background:var(--navy); color:#fff; position:relative; overflow:hidden; padding:110px 0 120px; }
+  .hero .simbolo { position:absolute; right:-120px; top:-40px; width:620px; opacity:.07; pointer-events:none; }
+  .hero .kicker { color:var(--teal-claro); }
+  .hero h1 { color:#fff; font-size:clamp(40px, 6.4vw, 76px); margin-top:18px; max-width:860px; }
+  .hero h1 span { color:var(--teal-claro); display:block; }
+  .hero p { font-size:19px; color:rgba(255,255,255,.84); max-width:620px; margin-top:28px; }
+  .botoes { display:flex; gap:14px; flex-wrap:wrap; margin-top:40px; }
+  .btn { display:inline-block; padding:14px 24px; border-radius:8px; font-weight:600; font-size:15px; text-decoration:none; }
+  .btn-cheio { background:var(--teal); color:#fff; }
+  .btn-cheio:hover { background:#0B666C; }
+  .btn-borda { border:1.5px solid rgba(255,255,255,.4); color:#fff; }
+  .btn-borda:hover { border-color:#fff; }
+
+  /* Eixos */
+  .eixos { background:var(--navy-2); color:#fff; }
+  .eixos .wrap { display:grid; grid-template-columns:repeat(4, 1fr); }
+  .eixo { padding:28px 24px; border-left:1px solid rgba(255,255,255,.12); }
+  .eixo:first-child { border-left:0; }
+  .eixo b { display:block; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--teal-claro); }
+  .eixo span { font-family:var(--serif); font-size:20px; }
+
+  /* Cartões */
+  .grade { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-top:48px; }
+  .cartao { background:#fff; border:1px solid var(--linha); border-top:3px solid var(--teal); border-radius:4px; padding:30px 28px; }
+  .cartao .num { font-family:var(--serif); font-size:15px; color:var(--teal); font-weight:600; }
+  .cartao h3 { margin:10px 0 12px; }
+  .cartao p { font-size:15.5px; }
+
+  /* Cultural */
+  .cultural { background:var(--papel); border-top:1px solid var(--linha); border-bottom:1px solid var(--linha); }
+  .duas { display:grid; grid-template-columns:1.1fr 1fr; gap:64px; align-items:start; }
+  .lista-dupla { display:grid; gap:20px; margin-top:8px; }
+  .lista-dupla div { border-left:3px solid var(--teal); padding:4px 0 4px 22px; }
+  .lista-dupla h3 { font-size:20px; margin-bottom:6px; }
+  blockquote { margin-top:36px; font-family:var(--serif); font-size:26px; line-height:1.3; color:var(--navy); }
+  blockquote::before { content:""; display:block; width:32px; height:2px; background:var(--teal); margin-bottom:16px; }
+
+  /* Convite e contato */
+  .convite { text-align:center; }
+  .convite .lead { margin:0 auto; }
+  .convite .traco { margin:22px auto 26px; }
+  .convite .botoes { justify-content:center; }
+  .convite .btn-cheio { background:var(--navy); }
+  .convite .btn-cheio:hover { background:var(--navy-2); }
+  .convite .btn-borda { border-color:var(--navy); color:var(--navy); }
+
+  footer { background:var(--navy-2); color:rgba(255,255,255,.7); padding:44px 0; font-size:14px; }
+  footer .wrap { display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+  footer img { height:46px; width:auto; }
+
+  @media (max-width: 900px) {
+    .grade { grid-template-columns:1fr; }
+    .duas { grid-template-columns:1fr; gap:40px; }
+    .eixos .wrap { grid-template-columns:repeat(2, 1fr); }
+    .eixo:nth-child(3) { border-left:0; }
+    .eixo { border-top:1px solid rgba(255,255,255,.12); }
+    nav { display:none; position:absolute; top:68px; left:0; right:0; background:var(--navy); flex-direction:column; gap:0; padding:8px 24px 18px; }
+    nav.aberto { display:flex; }
+    nav a { padding:12px 0; border-bottom:1px solid rgba(255,255,255,.1); }
+    .menu-btn { display:block; }
+    section { padding:72px 0; }
+    .hero { padding:80px 0 90px; }
+    .hero .simbolo { width:420px; right:-160px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="marca" href="#inicio"><img src="assets/logo-white.png" alt="LANAP"><span>UNIBH VESPASIANO</span></a>
+    <button class="menu-btn" aria-label="Abrir menu" onclick="document.querySelector('nav').classList.toggle('aberto')">☰</button>
+    <nav onclick="this.classList.remove('aberto')">
+      <a href="#cientifico">Núcleo Científico</a>
+      <a href="#cultural">Núcleo Cultural</a>
+      <a href="#contato">Parcerias</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+  <img class="simbolo" src="assets/lanap-symbol-white.svg" alt="">
+  <div class="wrap">
+    <div class="kicker">Liga Acadêmica de Neurociência Aplicada</div>
+    <h1>Formação, prática, <span>pesquisa e comunidade.</span></h1>
+    <p>Neurociência que se aprende, se pratica, se pesquisa e se compartilha. A LANAP é a liga acadêmica de neurociência do curso de Medicina da UniBH Vespasiano.</p>
+    <div class="botoes">
+      <a class="btn btn-cheio" href="#cientifico">Conheça os programas</a>
+      <a class="btn btn-borda" href="#contato">Seja parceiro</a>
+    </div>
+  </div>
+</section>
+
+<div class="eixos">
+  <div class="wrap">
+    <div class="eixo"><b>Formação</b><span>Programa Formativo</span></div>
+    <div class="eixo"><b>Prática</b><span>Programa Imersivo</span></div>
+    <div class="eixo"><b>Pesquisa</b><span>Produção Científica</span></div>
+    <div class="eixo"><b>Comunidade</b><span>Núcleo Cultural</span></div>
+  </div>
+</div>
+
+<section id="cientifico">
+  <div class="wrap">
+    <div class="kicker">01 · Núcleo Científico</div>
+    <h2>Da base teórica <em>à prática supervisionada</em></h2>
+    <div class="traco"></div>
+    <p class="lead">O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica. Seus três programas se articulam em um percurso contínuo: fundamentos, experiência supervisionada e pesquisa.</p>
+    <div class="grade">
+      <article class="cartao">
+        <div class="num">Formação</div>
+        <h3>Programa Formativo</h3>
+        <p>Aulas e discussões consolidam as bases em neuroanatomia, semiologia neurológica e neurociência aplicada.</p>
+      </article>
+      <article class="cartao">
+        <div class="num">Prática</div>
+        <h3>Programa Imersivo</h3>
+        <p>Vivências em serviços aproximam os ligantes da prática, sempre com orientação e supervisão. A imersão em neuro é precedida por aulas práticas preparatórias de neuroanatomia e paramentação cirúrgica, ministradas por docentes da instituição.</p>
+      </article>
+      <article class="cartao">
+        <div class="num">Pesquisa</div>
+        <h3>Produção Científica</h3>
+        <p>Grupos de estudo formulam perguntas de pesquisa, analisam criticamente as evidências e desenvolvem trabalhos sob orientação docente.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cultural" id="cultural">
+  <div class="wrap duas">
+    <div>
+      <div class="kicker">02 · Núcleo Cultural</div>
+      <h2>A ciência <em>em diálogo com o território</em></h2>
+      <div class="traco"></div>
+      <p class="lead">Instituído em setembro de 2026, o Núcleo Cultural leva à comunidade o conhecimento construído pela Liga e traz de volta as demandas que ela apresenta, em diálogo permanente com o Núcleo Científico.</p>
+      <blockquote>Ciência e comunidade orientam uma à outra.</blockquote>
+    </div>
+    <div class="lista-dupla">
+      <div>
+        <h3>Compartilhar conhecimento</h3>
+        <p>Transformar temas científicos em conversas e atividades úteis, construídas com os parceiros e ajustadas a quem participa.</p>
+      </div>
+      <div>
+        <h3>Escutar o território</h3>
+        <p>Acolher experiências e necessidades locais para que orientem os temas, os formatos e as prioridades das próximas ações da Liga.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="convite" id="contato">
+  <div class="wrap">
+    <div class="kicker">Um convite</div>
+    <h2>Parcerias</h2>
+    <div class="traco"></div>
+    <p class="lead">A LANAP está aberta a parcerias com profissionais e serviços que compartilhem o compromisso de formar estudantes com rigor científico e sensibilidade para o cuidado.</p>
+    <div class="botoes">
+      <a class="btn btn-cheio" href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener">Instagram @lanap.faseh</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo-white.png" alt="LANAP">
+    <div>LANAP · Liga Acadêmica de Neurociência Aplicada · UniBH Vespasiano</div>
+  </div>
+</footer>
+
+</body>
+</html>
