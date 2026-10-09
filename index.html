@@ -2,8 +2,9 @@
 <!-- Site institucional da LANAP para público externo, só leitura.
      Conteúdo: nota 55 (livreto institucional, vigente); detalhe dos programas a partir da
      matriz de atribuições (nota 32), nota 54 (aula de paramentação) e D16/D19 (Produtivo).
-     Sistema visual: grade de 12 colunas, cabeçalho de seção único, fios finos e o nó neural do símbolo
-     como motivo recorrente. Rolagem: cenas presas com progresso --p (JS); respeita prefers-reduced-motion. -->
+     Sistema visual: grade de 12 colunas, cabeçalho de seção único, fios finos e o nó neural do símbolo.
+     Rolagem: só a abertura fica presa; o resto corre livre e cada elemento [data-in] recebe --t (0..1)
+     conforme a posição na tela, de forma contínua e reversível. Respeita prefers-reduced-motion. -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -34,7 +35,7 @@
   body { font-family:var(--sans); font-size:16px; line-height:1.65; color:var(--texto); background:var(--creme); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   img { display:block; max-width:100%; }
   a { color:inherit; }
-  section { background:var(--bg); color:var(--corpo); }
+  section { background:var(--bg); color:var(--corpo); position:relative; }
 
   /* ---------- Grade e tipografia ---------- */
   .g { max-width:var(--max); margin:0 auto; padding:0 var(--gut); display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; }
@@ -46,19 +47,18 @@
   .titulo i, .display i { font-style:italic; font-weight:400; color:var(--acento); }
   .chapeu { font-family:var(--serif); font-size:clamp(19px, 1.7vw, 22px); line-height:1.5; color:var(--fg); opacity:.9; }
 
+  /* ---------- Entrada contínua: --t vai de 0 a 1 conforme o elemento sobe na tela ---------- */
+  [data-in] { opacity:var(--t, 0); transform:translate3d(0, calc((1 - var(--t, 0)) * 48px), 0); will-change:opacity, transform; }
+  [data-in="zoom"] { transform:translate3d(0, calc((1 - var(--t, 0)) * 36px), 0) scale(calc(.94 + var(--t, 0) * .06)); transform-origin:left bottom; }
+
   /* ---------- Motivo: nó neural ---------- */
-  .no { width:11px; height:11px; border-radius:50%; border:1.5px solid var(--acento); background:var(--bg); display:inline-block; flex:none; }
+  .no { width:11px; height:11px; border-radius:50%; border:1.5px solid var(--acento); background:var(--bg); display:inline-block; flex:none; transition:background .5s, transform .5s; }
   .no.cheio { background:var(--acento); }
 
   /* ---------- Cabeçalho de seção (o mesmo em todas) ---------- */
   .cab { grid-column:1 / -1; display:flex; align-items:center; gap:14px; padding:22px 0 18px; border-top:1px solid var(--fg); border-bottom:var(--fio); }
   .cab .num { font-family:var(--serif); font-size:15px; color:var(--acento); }
   .cab .sep { flex:1; height:1px; background:var(--rule); }
-
-  /* ---------- Revelação ---------- */
-  .rv { opacity:0; transform:translateY(28px); transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
-  .rv.on { opacity:1; transform:none; }
-  .d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; } .d3 { transition-delay:.3s; }
 
   /* ---------- Topo fixo ---------- */
   .topo { position:fixed; inset:0 0 auto 0; z-index:20; color:#fff; transition:background .35s, border-color .35s; border-bottom:1px solid transparent; }
@@ -74,30 +74,27 @@
   .menu-btn { display:none; grid-column:12; justify-self:end; background:none; border:0; color:#fff; font-size:22px; cursor:pointer; }
   .progresso { position:fixed; top:0; left:0; height:2px; background:var(--teal-claro); width:calc(var(--rolagem, 0) * 100%); z-index:30; }
 
-  /* ---------- Cenas presas ---------- */
-  .cena { position:relative; --p:0; }
-  .palco { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
-
-  /* ---------- 1. Abertura ---------- */
-  .abertura { height:280vh; }
-  .abertura .palco { background:radial-gradient(120% 90% at 78% 30%, #284462 0%, var(--navy) 55%, var(--navy-3) 100%); }
+  /* ---------- 1. Abertura (única cena presa) ---------- */
+  .abertura { height:190vh; --p:0; }
+  .abertura .palco { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; flex-direction:column; justify-content:center;
+    background:radial-gradient(120% 90% at 78% 30%, #284462 0%, var(--navy) 55%, var(--navy-3) 100%); }
   .abertura .rede { position:absolute; inset:0; width:100%; height:100%; opacity:calc(.6 - var(--p) * .6); }
   .abertura .simbolo { position:absolute; right:calc(var(--gut) + 2vw); top:50%; width:min(40vw, 520px);
-    transform:translate3d(0, -50%, 0) scale(calc(1 + var(--p) * 4)); transform-origin:60% 45%; opacity:calc(.13 - var(--p) * .1); will-change:transform, opacity; }
-  .abertura .masthead { position:absolute; top:88px; left:0; right:0; opacity:calc(1 - var(--p) * 5); }
+    transform:translate3d(0, -50%, 0) scale(calc(1 + var(--p) * 3)); transform-origin:60% 45%; opacity:calc(.14 - var(--p) * .1); will-change:transform, opacity; }
+  .abertura .masthead { position:absolute; top:88px; left:0; right:0; opacity:calc(1 - var(--p) * 3); }
   .abertura .masthead .g > div { grid-column:1 / -1; display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,.5); border-bottom:var(--fio); padding:10px 0; }
-  .abertura .conteudo { opacity:calc(1 - var(--p) * 4.2); transform:translateY(calc(var(--p) * -60px)); }
+  .abertura .conteudo { opacity:calc(1 - var(--p) * 2.6); transform:translate3d(0, calc(var(--p) * -50px), 0); }
   .abertura .conteudo .rotulo { grid-column:1 / -1; }
   .abertura .display { grid-column:1 / 10; font-size:clamp(46px, 7.6vw, 108px); margin-top:22px; }
   .abertura .chapeu { grid-column:1 / 7; margin-top:30px; color:rgba(255,255,255,.82); }
-  .abertura .rodape-palco { position:absolute; bottom:28px; left:0; right:0; opacity:calc(1 - var(--p) * 6); }
+  .abertura .rodape-palco { position:absolute; bottom:28px; left:0; right:0; opacity:calc(1 - var(--p) * 4); }
   .abertura .rodape-palco .g > div { grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center; border-top:var(--fio); padding-top:14px; }
-  .abertura .manifesto { position:absolute; inset:0; display:flex; align-items:center; opacity:calc((var(--p) - .3) * 3.2); transform:scale(calc(.92 + var(--p) * .08)); }
+  .abertura .manifesto { position:absolute; inset:0; display:flex; align-items:center; opacity:calc((var(--p) - .38) * 2.6); transform:scale(calc(.94 + var(--p) * .06)); }
   .abertura .manifesto .display { grid-column:2 / 12; font-size:clamp(34px, 5.4vw, 74px); text-align:center; }
 
   /* ---------- 2. Sumário ---------- */
-  .sumario { padding:72px 0 80px; }
-  .sumario ol { grid-column:1 / -1; list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); border-bottom:var(--fio); }
+  .sumario { padding:96px 0 104px; }
+  .sumario ol { grid-column:1 / -1; list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); border-bottom:var(--fio); margin-top:48px; }
   .sumario li a { display:block; text-decoration:none; padding:26px 24px 30px 0; margin-right:24px; border-top:1px solid var(--rule); position:relative; height:100%; }
   .sumario li a::before { content:""; position:absolute; top:-6px; left:0; width:11px; height:11px; border-radius:50%; background:var(--bg); border:1.5px solid var(--acento); transition:background .3s; }
   .sumario li a:hover::before { background:var(--acento); }
@@ -106,57 +103,50 @@
   .sumario p { font-size:14px; color:var(--sutil); }
 
   /* ---------- 3. Núcleo Científico ---------- */
-  .intro { height:250vh; }
-  .intro .frase { grid-column:1 / 11; font-family:var(--serif); font-size:clamp(28px, 3.9vw, 50px); line-height:1.2; color:var(--fg); margin-top:44px; letter-spacing:-.01em; }
-  .intro .frase .w { opacity:calc(.14 + var(--t, 0) * .86); }
-  .intro .eixo { grid-column:1 / -1; margin-top:52px; display:grid; grid-template-columns:repeat(3, 1fr); position:relative; }
+  .intro { padding:120px 0 140px; }
+  .intro .frase { grid-column:1 / 11; font-family:var(--serif); font-size:clamp(28px, 3.9vw, 50px); line-height:1.2; color:var(--fg); margin-top:48px; letter-spacing:-.01em; }
+  .intro .frase .w { opacity:calc(.12 + var(--t, 0) * .88); }
+  .intro .eixo { grid-column:1 / -1; margin-top:64px; display:grid; grid-template-columns:repeat(3, 1fr); position:relative; }
   .intro .eixo::after { content:""; position:absolute; top:5px; left:0; right:0; height:1px; background:var(--rule); }
-  .intro .eixo::before { content:""; position:absolute; top:5px; left:0; height:1px; background:var(--acento); width:calc(var(--linha-eixo, 0) * 100%); z-index:1; }
-  .intro .etapa-eixo { position:relative; z-index:2; opacity:calc(.3 + var(--t, 0) * .7); transform:translate3d(0, calc((1 - var(--t, 0)) * 14px), 0); }
+  .intro .eixo::before { content:""; position:absolute; top:5px; left:0; height:1px; background:var(--acento); width:calc(var(--enchimento, 0) * 100%); z-index:1; }
+  .intro .etapa-eixo { position:relative; z-index:2; }
   .intro .etapa-eixo.on .no { background:var(--acento); }
   .intro .etapa-eixo .rotulo { display:block; margin-top:16px; color:var(--acento); }
   .intro .etapa-eixo span:last-child { font-family:var(--serif); font-size:20px; color:var(--fg); }
 
-  /* ---------- 4. Programas (molde único) ---------- */
-  .programa { height:360vh; }
-  .programa .palco { justify-content:center; padding-top:64px; }
-  .programa .cab { margin-bottom:clamp(28px, 5vh, 56px); }
-  .programa .lado { grid-column:1 / 6; align-self:start; }
-  .programa .lado { transform:translateY(calc((1 - min(var(--p) * 5, 1)) * 24px)); }
+  /* ---------- 4. Programas (molde único; título preso, etapas correm) ---------- */
+  .programa { padding:120px 0 150px; }
+  .programa .lado { grid-column:1 / 6; align-self:start; position:sticky; top:120px; margin-top:56px; }
   .programa .chapeu { margin-top:24px; }
   .programa .medidor { margin-top:36px; display:flex; align-items:center; gap:14px; }
   .programa .medidor .trilho { flex:1; max-width:220px; height:1px; background:var(--rule); position:relative; }
   .programa .medidor .trilho i { position:absolute; inset:0 auto 0 0; width:calc(var(--enchimento, 0) * 100%); background:var(--acento); }
   .programa .medidor .num { font-family:var(--serif); font-size:14px; color:var(--acento); min-width:42px; }
 
-  /* Via: a sequência de etapas como um axônio com nós */
-  .via { grid-column:7 / -1; list-style:none; position:relative; align-self:start; }
+  /* Via: as etapas como um axônio com nós */
+  .via { grid-column:7 / -1; list-style:none; position:relative; align-self:start; margin-top:56px; }
   .via::before, .via::after { content:""; position:absolute; left:5px; top:10px; width:1px; }
   .via::before { bottom:10px; background:var(--rule); }
   .via::after { height:calc(var(--enchimento, 0) * (100% - 20px)); background:var(--acento); }
-  .passo { position:relative; padding:0 0 clamp(18px, 3.2vh, 30px) 40px; opacity:calc(.25 + var(--t, 0) * .75); }
-  .passo .cabeca-passo, .passo p { transform:translate3d(calc((1 - var(--t, 0)) * 28px), 0, 0); }
-  .passo .no { position:absolute; left:0; top:7px; z-index:1; transition:background .5s, transform .5s; }
+  .passo { position:relative; padding:0 0 44px 40px; }
+  .passo .no { position:absolute; left:0; top:7px; z-index:1; }
   .passo.on .no { background:var(--acento); transform:scale(1.15); }
   .passo .cabeca-passo { display:flex; align-items:baseline; gap:12px; }
   .passo .cabeca-passo .num { font-family:var(--serif); font-size:14px; color:var(--acento); }
-  .passo h3 { font-family:var(--serif); font-weight:500; font-size:clamp(20px, 1.9vw, 24px); color:var(--fg); line-height:1.2; }
-  .passo p { margin-top:6px; font-size:15px; color:var(--corpo); max-width:520px; }
-  .passo:not(:last-child) p { padding-bottom:clamp(14px, 2.6vh, 24px); border-bottom:var(--fio); }
+  .passo h3 { font-family:var(--serif); font-weight:500; font-size:clamp(21px, 2vw, 26px); color:var(--fg); line-height:1.2; }
+  .passo p { margin-top:8px; font-size:16px; color:var(--corpo); max-width:520px; }
+  .passo:not(:last-child) p { padding-bottom:40px; border-bottom:var(--fio); }
+  .passo:last-child { padding-bottom:0; }
 
   /* ---------- 5. Núcleo Cultural ---------- */
-  .cultural { padding:120px 0 40px; }
-  .cultural .lado { grid-column:1 / 6; margin-top:48px; }
+  .cultural { padding:120px 0 60px; }
+  .cultural .lado { grid-column:1 / 6; margin-top:56px; }
   .cultural .chapeu { margin-top:24px; }
-  .cultural .via { margin-top:56px; }
-  .cultural .passo { --t:1; }
-  .cultural .passo .no { background:var(--acento); }
-  .cultural .passo.rv { opacity:0; }
-  .cultural .passo.rv.on { opacity:1; }
-  .citacao { height:220vh; }
-  .citacao figure { grid-column:2 / 12; text-align:center; transform:scale(calc(.86 + var(--p) * .2)); opacity:calc(var(--p) * 3.2); }
+  .citacao { padding:120px 0 170px; }
+  .citacao figure { grid-column:2 / 12; text-align:center; }
   .citacao blockquote { font-family:var(--serif); font-weight:500; font-size:clamp(34px, 5.6vw, 78px); line-height:1.08; color:var(--fg); letter-spacing:-.015em; }
   .citacao blockquote i { font-weight:400; color:var(--acento); }
+  .citacao [data-in="zoom"] { transform-origin:center; transform:scale(calc(.88 + var(--t, 0) * .12)); }
   .citacao figcaption { margin-top:30px; display:flex; justify-content:center; align-items:center; gap:14px; }
   .citacao figcaption::before, .citacao figcaption::after { content:""; width:56px; height:1px; background:var(--rule); }
 
@@ -184,35 +174,29 @@
     .abertura .masthead .rotulo:last-child { display:none; }
     .abertura .simbolo { right:-20vw; width:80vw; }
     .sumario ol { grid-template-columns:1fr 1fr; row-gap:8px; }
-    .intro .eixo { grid-template-columns:1fr; gap:18px; }
+    .intro .eixo { grid-template-columns:1fr; gap:22px; }
     .intro .eixo::before, .intro .eixo::after { display:none; }
     .intro .etapa-eixo { display:flex; align-items:center; gap:14px; }
     .intro .etapa-eixo .rotulo { margin:0; min-width:70px; }
-    .programa { height:340vh; }
-    .programa .palco { padding-top:76px; }
-    .programa .cab { margin-bottom:18px; padding:14px 0 12px; }
     .cab .rotulo:last-child { display:none; }
+    .programa, .intro, .cultural, .sumario, .convite { padding-top:80px; }
     .programa .lado, .via, .cultural .lado { grid-column:1 / -1; }
-    .programa .lado { transform:none; }
-    .programa .titulo { font-size:30px; }
-    .programa .chapeu { font-size:16px; margin-top:10px; }
+    .programa .lado { position:relative; top:0; margin-top:32px; }
     .programa .medidor { display:none; }
-    .programa .via { margin-top:22px; }
-    .passo { padding-bottom:12px; padding-left:30px; }
-    .passo h3 { font-size:18px; }
-    .passo p { font-size:13.5px; padding-bottom:10px !important; }
+    .via { margin-top:40px; }
+    .passo { padding-left:30px; padding-bottom:30px; }
+    .passo:not(:last-child) p { padding-bottom:28px; }
+    .passo h3 { font-size:20px; }
+    .passo p { font-size:15px; }
     .convite .acao { grid-column:1 / -1; justify-self:start; margin-top:32px; }
   }
-  @media (max-width: 900px) and (max-height: 760px) { .programa .chapeu { display:none; } }
 
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior:auto; }
-    .rv, .passo, .intro .frase .w, .intro .etapa-eixo { opacity:1 !important; transform:none !important; transition:none !important; }
-    .passo .no { background:var(--acento); }
-    .abertura, .intro, .programa, .citacao { height:auto; }
-    .palco { position:relative; height:auto; min-height:100vh; padding:120px 0 80px; }
+    [data-in], .intro .frase .w { opacity:1 !important; transform:none !important; }
+    .abertura { height:auto; }
+    .abertura .palco { position:relative; min-height:100vh; padding:140px 0 100px; }
     .abertura .manifesto, .abertura .simbolo { display:none; }
-    .abertura .conteudo, .abertura .masthead, .citacao figure, .programa .lado { opacity:1; transform:none; }
+    .abertura .conteudo, .abertura .masthead { opacity:1; transform:none; }
   }
 </style>
 </head>
@@ -236,7 +220,7 @@
 <main>
 
 <!-- 1. Abertura -->
-<section class="cena abertura escuro" id="inicio">
+<section class="abertura escuro" id="inicio">
   <div class="palco">
     <svg class="rede" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g stroke="rgba(92,196,201,.22)" stroke-width="1" fill="none">
@@ -268,125 +252,113 @@
 <!-- 2. Sumário -->
 <section class="sumario papel">
   <div class="g">
-    <div class="cab rv"><span class="no cheio"></span><span class="rotulo">Sumário</span><span class="sep"></span><span class="rotulo">Quatro eixos</span></div>
-  </div>
-  <div class="g" style="margin-top:48px">
+    <div class="cab" data-in><span class="no cheio"></span><span class="rotulo">Sumário</span><span class="sep"></span><span class="rotulo">Quatro eixos</span></div>
     <ol>
-      <li class="rv"><a href="#formativo"><span class="n num">01</span><span class="rotulo ac" style="margin-left:10px">Formação</span><h3>Programa Formativo</h3><p>Aulas e discussões sobre as bases da neurociência.</p></a></li>
-      <li class="rv d1"><a href="#imersivo"><span class="n num">02</span><span class="rotulo ac" style="margin-left:10px">Prática</span><h3>Programa Imersivo</h3><p>Vivência em serviços, com orientação e supervisão.</p></a></li>
-      <li class="rv d2"><a href="#producao"><span class="n num">03</span><span class="rotulo ac" style="margin-left:10px">Pesquisa</span><h3>Produção Científica</h3><p>Perguntas, evidências e trabalhos orientados.</p></a></li>
-      <li class="rv d3"><a href="#cultural"><span class="n num">04</span><span class="rotulo ac" style="margin-left:10px">Comunidade</span><h3>Núcleo Cultural</h3><p>A ciência em diálogo com o território.</p></a></li>
+      <li data-in><a href="#formativo"><span class="n num">01</span><span class="rotulo ac" style="margin-left:10px">Formação</span><h3>Programa Formativo</h3><p>Aulas e discussões sobre as bases da neurociência.</p></a></li>
+      <li data-in><a href="#imersivo"><span class="n num">02</span><span class="rotulo ac" style="margin-left:10px">Prática</span><h3>Programa Imersivo</h3><p>Vivência em serviços, com orientação e supervisão.</p></a></li>
+      <li data-in><a href="#producao"><span class="n num">03</span><span class="rotulo ac" style="margin-left:10px">Pesquisa</span><h3>Produção Científica</h3><p>Perguntas, evidências e trabalhos orientados.</p></a></li>
+      <li data-in><a href="#cultural"><span class="n num">04</span><span class="rotulo ac" style="margin-left:10px">Comunidade</span><h3>Núcleo Cultural</h3><p>A ciência em diálogo com o território.</p></a></li>
     </ol>
   </div>
 </section>
 
 <!-- 3. Núcleo Científico -->
-<section class="cena intro" id="cientifico">
-  <div class="palco">
-    <div class="g">
-      <div class="cab"><span class="no cheio"></span><span class="rotulo ac">Núcleo Científico</span><span class="sep"></span><span class="rotulo">Programas 01–03</span></div>
-      <p class="frase" data-palavras>O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica, em um percurso contínuo.</p>
-      <div class="eixo">
-        <div class="etapa-eixo"><span class="no"></span><span class="rotulo">Etapa 1</span><span>Fundamentos</span></div>
-        <div class="etapa-eixo"><span class="no"></span><span class="rotulo">Etapa 2</span><span>Experiência supervisionada</span></div>
-        <div class="etapa-eixo"><span class="no"></span><span class="rotulo">Etapa 3</span><span>Pesquisa</span></div>
-      </div>
+<section class="intro" id="cientifico">
+  <div class="g">
+    <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Núcleo Científico</span><span class="sep"></span><span class="rotulo">Programas 01–03</span></div>
+    <p class="frase" data-palavras>O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica, em um percurso contínuo.</p>
+    <div class="eixo" data-via>
+      <div class="etapa-eixo" data-in data-no><span class="no"></span><span class="rotulo">Etapa 1</span><span>Fundamentos</span></div>
+      <div class="etapa-eixo" data-in data-no><span class="no"></span><span class="rotulo">Etapa 2</span><span>Experiência supervisionada</span></div>
+      <div class="etapa-eixo" data-in data-no><span class="no"></span><span class="rotulo">Etapa 3</span><span>Pesquisa</span></div>
     </div>
   </div>
 </section>
 
 <!-- 4a. Formativo -->
-<section class="cena programa papel" id="formativo">
-  <div class="palco">
-    <div class="g">
-      <div class="cab"><span class="num">01</span><span class="rotulo ac">Formação</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
-      <div class="lado">
-        <h2 class="titulo">Programa <i>Formativo</i></h2>
-        <p class="chapeu">Aulas e discussões consolidam as bases em neuroanatomia, semiologia neurológica e neurociência aplicada.</p>
-        <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
-      </div>
-      <ol class="via">
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">1.1</span><h3>Bases da neurociência</h3></div><p>Os temas partem dos fundamentos: neuroanatomia, semiologia neurológica e neurociência aplicada.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">1.2</span><h3>Aula planejada pela liga</h3></div><p>A liga define a estrutura e o plano de conteúdo de cada aula antes do encontro.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">1.3</span><h3>Docentes da instituição</h3></div><p>As aulas são ministradas por professores convidados da UniBH Vespasiano.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">1.4</span><h3>Discussão e material de apoio</h3></div><p>Cada encontro combina exposição e discussão, com material como slides e apostila para revisar depois.</p></li>
-      </ol>
+<section class="programa papel" id="formativo">
+  <div class="g">
+    <div class="cab" data-in><span class="num">01</span><span class="rotulo ac">Formação</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
+    <div class="lado" data-in="zoom">
+      <h2 class="titulo">Programa <i>Formativo</i></h2>
+      <p class="chapeu">Aulas e discussões consolidam as bases em neuroanatomia, semiologia neurológica e neurociência aplicada.</p>
+      <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
     </div>
+    <ol class="via" data-via>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.1</span><h3>Bases da neurociência</h3></div><p>Os temas partem dos fundamentos: neuroanatomia, semiologia neurológica e neurociência aplicada.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.2</span><h3>Aula planejada pela liga</h3></div><p>A liga define a estrutura e o plano de conteúdo de cada aula antes do encontro.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.3</span><h3>Docentes da instituição</h3></div><p>As aulas são ministradas por professores convidados da UniBH Vespasiano.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.4</span><h3>Discussão e material de apoio</h3></div><p>Cada encontro combina exposição e discussão, com material como slides e apostila para revisar depois.</p></li>
+    </ol>
   </div>
 </section>
 
 <!-- 4b. Imersivo -->
-<section class="cena programa escuro" id="imersivo">
-  <div class="palco">
-    <div class="g">
-      <div class="cab"><span class="num">02</span><span class="rotulo ac">Prática</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
-      <div class="lado">
-        <h2 class="titulo">Programa <i>Imersivo</i></h2>
-        <p class="chapeu">Vivências em serviços aproximam os ligantes da prática, sempre com orientação e supervisão.</p>
-        <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
-      </div>
-      <ol class="via">
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">2.1</span><h3>Aula prática de neuroanatomia</h3></div><p>A imersão em neuro começa pela anatomia, em aula prática preparatória com docente da instituição.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">2.2</span><h3>Paramentação cirúrgica</h3></div><p>Antes de entrar em campo, os ligantes treinam paramentação e conduta no ambiente cirúrgico de neurocirurgia.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">2.3</span><h3>Protocolo de campo</h3></div><p>Cada vivência respeita a capacidade real do serviço, com protocolo de campo e regras de registro definidos antes.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">2.4</span><h3>Vivência supervisionada</h3></div><p>A prática acontece nos serviços, sempre com orientação e supervisão.</p></li>
-      </ol>
+<section class="programa escuro" id="imersivo">
+  <div class="g">
+    <div class="cab" data-in><span class="num">02</span><span class="rotulo ac">Prática</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
+    <div class="lado" data-in="zoom">
+      <h2 class="titulo">Programa <i>Imersivo</i></h2>
+      <p class="chapeu">Vivências em serviços aproximam os ligantes da prática, sempre com orientação e supervisão.</p>
+      <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
     </div>
+    <ol class="via" data-via>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">2.1</span><h3>Aula prática de neuroanatomia</h3></div><p>A imersão em neuro começa pela anatomia, em aula prática preparatória com docente da instituição.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">2.2</span><h3>Paramentação cirúrgica</h3></div><p>Antes de entrar em campo, os ligantes treinam paramentação e conduta no ambiente cirúrgico de neurocirurgia.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">2.3</span><h3>Protocolo de campo</h3></div><p>Cada vivência respeita a capacidade real do serviço, com protocolo de campo e regras de registro definidos antes.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">2.4</span><h3>Vivência supervisionada</h3></div><p>A prática acontece nos serviços, sempre com orientação e supervisão.</p></li>
+    </ol>
   </div>
 </section>
 
 <!-- 4c. Produção Científica -->
-<section class="cena programa" id="producao">
-  <div class="palco">
-    <div class="g">
-      <div class="cab"><span class="num">03</span><span class="rotulo ac">Pesquisa</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
-      <div class="lado">
-        <h2 class="titulo">Produção <i>Científica</i></h2>
-        <p class="chapeu">Grupos de estudo formulam perguntas de pesquisa, analisam criticamente as evidências e desenvolvem trabalhos sob orientação docente.</p>
-        <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
-      </div>
-      <ol class="via">
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">3.1</span><h3>Pergunta de pesquisa</h3></div><p>Os grupos de estudo começam por uma pergunta, não por um tema genérico.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">3.2</span><h3>Leitura crítica das evidências</h3></div><p>A literatura é analisada criticamente antes de qualquer conclusão.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">3.3</span><h3>Orientação docente</h3></div><p>Os trabalhos são desenvolvidos sob orientação de professores.</p></li>
-        <li class="passo"><span class="no"></span><div class="cabeca-passo"><span class="num">3.4</span><h3>Ciência comunicada</h3></div><p>Temas aprovados pela diretoria científica viram dossiês e conteúdo científico publicado nos canais da liga.</p></li>
-      </ol>
+<section class="programa" id="producao">
+  <div class="g">
+    <div class="cab" data-in><span class="num">03</span><span class="rotulo ac">Pesquisa</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
+    <div class="lado" data-in="zoom">
+      <h2 class="titulo">Produção <i>Científica</i></h2>
+      <p class="chapeu">Grupos de estudo formulam perguntas de pesquisa, analisam criticamente as evidências e desenvolvem trabalhos sob orientação docente.</p>
+      <div class="medidor"><span class="trilho"><i></i></span><span class="num" data-contador>0/4</span></div>
     </div>
+    <ol class="via" data-via>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">3.1</span><h3>Pergunta de pesquisa</h3></div><p>Os grupos de estudo começam por uma pergunta, não por um tema genérico.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">3.2</span><h3>Leitura crítica das evidências</h3></div><p>A literatura é analisada criticamente antes de qualquer conclusão.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">3.3</span><h3>Orientação docente</h3></div><p>Os trabalhos são desenvolvidos sob orientação de professores.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">3.4</span><h3>Ciência comunicada</h3></div><p>Temas aprovados pela diretoria científica viram dossiês e conteúdo científico publicado nos canais da liga.</p></li>
+    </ol>
   </div>
 </section>
 
 <!-- 5. Núcleo Cultural -->
 <section class="cultural papel" id="cultural">
   <div class="g">
-    <div class="cab rv"><span class="num">04</span><span class="rotulo ac">Comunidade</span><span class="sep"></span><span class="rotulo">Instituído em setembro de 2026</span></div>
-    <div class="lado">
-      <h2 class="titulo rv">Núcleo <i>Cultural</i></h2>
-      <p class="chapeu rv d1">O Núcleo Cultural leva à comunidade o conhecimento construído pela Liga e traz de volta as demandas que ela apresenta, em diálogo permanente com o Núcleo Científico.</p>
+    <div class="cab" data-in><span class="num">04</span><span class="rotulo ac">Comunidade</span><span class="sep"></span><span class="rotulo">Instituído em setembro de 2026</span></div>
+    <div class="lado" data-in="zoom">
+      <h2 class="titulo">Núcleo <i>Cultural</i></h2>
+      <p class="chapeu">O Núcleo Cultural leva à comunidade o conhecimento construído pela Liga e traz de volta as demandas que ela apresenta, em diálogo permanente com o Núcleo Científico.</p>
     </div>
-    <ol class="via" style="--enchimento:1">
-      <li class="passo rv d1"><span class="no"></span><div class="cabeca-passo"><span class="num">4.1</span><h3>Compartilhar conhecimento</h3></div><p>Transformar temas científicos em conversas e atividades úteis, construídas com os parceiros e ajustadas a quem participa.</p></li>
-      <li class="passo rv d2"><span class="no"></span><div class="cabeca-passo"><span class="num">4.2</span><h3>Escutar o território</h3></div><p>Acolher experiências e necessidades locais para que orientem os temas, os formatos e as prioridades das próximas ações da Liga.</p></li>
+    <ol class="via" data-via>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">4.1</span><h3>Compartilhar conhecimento</h3></div><p>Transformar temas científicos em conversas e atividades úteis, construídas com os parceiros e ajustadas a quem participa.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">4.2</span><h3>Escutar o território</h3></div><p>Acolher experiências e necessidades locais para que orientem os temas, os formatos e as prioridades das próximas ações da Liga.</p></li>
     </ol>
   </div>
 </section>
-<section class="cena citacao papel">
-  <div class="palco">
-    <div class="g">
-      <figure>
-        <blockquote>Ciência e comunidade <i>orientam uma à outra.</i></blockquote>
-        <figcaption><span class="rotulo">LANAP · Núcleo Cultural</span></figcaption>
-      </figure>
-    </div>
+<section class="citacao papel">
+  <div class="g">
+    <figure data-in="zoom">
+      <blockquote>Ciência e comunidade <i>orientam uma à outra.</i></blockquote>
+      <figcaption><span class="rotulo">LANAP · Núcleo Cultural</span></figcaption>
+    </figure>
   </div>
 </section>
 
 <!-- 6. Convite -->
 <section class="convite escuro" id="convite">
   <div class="g">
-    <div class="cab rv"><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
-    <h2 class="titulo rv">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
-    <p class="chapeu rv d1">A LANAP está aberta a parcerias com profissionais e serviços que compartilhem esse compromisso.</p>
-    <div class="acao rv d2"><a class="btn" href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener"><span class="no"></span>Fale com a LANAP no Instagram</a></div>
+    <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
+    <h2 class="titulo" data-in="zoom">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
+    <p class="chapeu" data-in>A LANAP está aberta a parcerias com profissionais e serviços que compartilhem esse compromisso.</p>
+    <div class="acao" data-in><a class="btn" href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener"><span class="no"></span>Fale com a LANAP no Instagram</a></div>
   </div>
   <div class="colofao"><div class="g"><div>
     <img src="assets/logo-white.png" alt="LANAP">
@@ -401,19 +373,22 @@
 (function () {
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var raiz = document.documentElement, topo = document.querySelector('.topo');
-
-  var obs = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
-  }, { threshold: .15 });
-  document.querySelectorAll('.rv').forEach(function (el) { reduz ? el.classList.add('on') : obs.observe(el); });
+  var abertura = document.querySelector('.abertura');
 
   document.querySelectorAll('[data-palavras]').forEach(function (el) {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   });
 
+  var entradas = Array.prototype.slice.call(document.querySelectorAll('[data-in]'));
+  var nos = Array.prototype.slice.call(document.querySelectorAll('[data-no]'));
+  var vias = Array.prototype.slice.call(document.querySelectorAll('[data-via]'));
+  var frases = Array.prototype.slice.call(document.querySelectorAll('[data-palavras]'));
+  var contadores = Array.prototype.slice.call(document.querySelectorAll('.programa'));
+
   if (reduz) {
-    document.querySelectorAll('.passo, .etapa-eixo, .w').forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
-    document.querySelectorAll('.via').forEach(function (v) { v.style.setProperty('--enchimento', 1); });
+    entradas.concat(nos).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
+    vias.forEach(function (v) { v.style.setProperty('--enchimento', 1); });
+    document.querySelectorAll('.w').forEach(function (w) { w.style.setProperty('--t', 1); });
     document.querySelectorAll('[data-contador]').forEach(function (el) { el.textContent = '4/4'; });
     return;
   }
@@ -421,68 +396,61 @@
   function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
 
-  // Distribui o avanço f (0..1) por uma lista: cada item tem seu próprio --t contínuo.
-  function espalha(lista, f, largura) {
-    var n = lista.length, w = largura || 1.6, acesos = 0;
-    for (var i = 0; i < n; i++) {
-      var t = suave((f * (n + w - 1) - i) / w);
-      lista[i].style.setProperty('--t', t.toFixed(3));
-      lista[i].classList.toggle('on', t > .5);
-      if (t > .5) acesos++;
-    }
-    return acesos;
-  }
-
-  var cenas = Array.prototype.slice.call(document.querySelectorAll('.cena')).map(function (c) {
-    return { el: c, passos: c.querySelectorAll('.passo'), via: c.querySelector('.via'), cont: c.querySelector('[data-contador]'),
-             palavras: c.querySelectorAll('.w'), eixo: c.querySelector('.eixo'), etapas: c.querySelectorAll('.etapa-eixo'),
-             prog: c.classList.contains('programa'), intro: c.classList.contains('intro'), ultimo: -1 };
-  });
-
   function quadro() {
     var vh = innerHeight, y = scrollY;
     raiz.style.setProperty('--rolagem', (y / Math.max(1, raiz.scrollHeight - vh)).toFixed(4));
     topo.classList.toggle('solido', y > vh * .5);
-    cenas.forEach(function (s) {
-      var r = s.el.getBoundingClientRect();
-      var curso = s.el.offsetHeight - vh;
-      var p = curso > 0 ? lim(-r.top / curso) : 0;
-      if (Math.abs(p - s.ultimo) < .0005) return;
-      s.ultimo = p;
-      s.el.style.setProperty('--p', p.toFixed(4));
-      if (s.prog) {
-        var f = lim((p - .04) / .82);
-        var n = espalha(s.passos, f, 1.4);
-        s.via.style.setProperty('--enchimento', lim(f * 1.08).toFixed(4));
-        s.cont.textContent = n + '/' + s.passos.length;
-      }
-      if (s.intro) {
-        espalha(s.palavras, lim(p / .6), 3);
-        var g = lim((p - .58) / .36);
-        espalha(s.etapas, g, 1.2);
-        s.eixo.style.setProperty('--linha-eixo', (g * .72).toFixed(4));
-      }
+
+    // Abertura: progresso da cena presa
+    var cursoA = abertura.offsetHeight - vh;
+    abertura.style.setProperty('--p', lim(y / Math.max(1, cursoA)).toFixed(4));
+
+    // Cada elemento aparece enquanto sobe de 96% até 62% da altura da tela
+    entradas.forEach(function (el) {
+      var top = el.getBoundingClientRect().top;
+      el.style.setProperty('--t', suave((vh * .96 - top) / (vh * .34)).toFixed(3));
+    });
+    // Nó acende quando a etapa cruza 60% da tela
+    nos.forEach(function (el) { el.classList.toggle('on', el.getBoundingClientRect().top < vh * .6); });
+    // Linha da via acompanha a posição de 60% da tela
+    vias.forEach(function (v) {
+      var r = v.getBoundingClientRect();
+      var tam = v.classList.contains('eixo') ? r.width : r.height;
+      var f = v.classList.contains('eixo')
+        ? lim((vh * .6 - r.top) / (vh * .3)) * .72
+        : lim((vh * .6 - r.top) / Math.max(1, r.height - 20));
+      v.style.setProperty('--enchimento', f.toFixed(4));
+    });
+    // Frase do Núcleo Científico: palavra a palavra, contínuo
+    frases.forEach(function (fr) {
+      var r = fr.getBoundingClientRect();
+      var f = lim((vh * .85 - r.top) / (vh * .55 + r.height * .5));
+      var ws = fr.querySelectorAll('.w'), n = ws.length;
+      for (var i = 0; i < n; i++) ws[i].style.setProperty('--t', suave((f * (n + 4) - i - 1) / 4).toFixed(3));
+    });
+    // Contador e medidor dos programas
+    contadores.forEach(function (sec) {
+      var via = sec.querySelector('.via');
+      var acesos = sec.querySelectorAll('.passo.on').length;
+      var c = sec.querySelector('[data-contador]');
+      if (c) c.textContent = acesos + '/' + sec.querySelectorAll('.passo').length;
+      sec.style.setProperty('--enchimento', via.style.getPropertyValue('--enchimento') || 0);
     });
   }
 
-  // Rolagem com inércia; sem a biblioteca, a rolagem nativa continua funcionando.
   if (window.Lenis) {
-    var lenis = new Lenis({ lerp: .075, wheelMultiplier: .85, smoothWheel: true });
+    var lenis = new Lenis({ lerp: .12, wheelMultiplier: 1, smoothWheel: true });
     lenis.on('scroll', quadro);
     (function loop(t) { lenis.raf(t); requestAnimationFrame(loop); })(performance.now());
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
         var alvo = document.querySelector(a.getAttribute('href'));
-        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 2.2 }); }
+        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 1.6 }); }
       });
     });
-  } else {
-    var pendente = false;
-    addEventListener('scroll', function () {
-      if (!pendente) { pendente = true; requestAnimationFrame(function () { pendente = false; quadro(); }); }
-    }, { passive: true });
   }
-  addEventListener('resize', function () { cenas.forEach(function (s) { s.ultimo = -1; }); quadro(); });
+  addEventListener('scroll', quadro, { passive: true });
+  addEventListener('resize', quadro);
   quadro();
 })();
 </script>
