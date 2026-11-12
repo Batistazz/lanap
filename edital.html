@@ -1,104 +1,298 @@
 <!doctype html>
-<!-- Resumo do processo seletivo 2026.2, aberto pela bolinha flutuante (assets/edital.js).
-     Fonte: formulário oficial de inscrição "Inscricao – Selecao de Aspirantes LANAP 2026.2", lido em 11/11/2026.
-     O edital completo (com Anexos I e II) ainda não foi localizado: quando o dono enviar, ligar em LANAP_SELECAO.editalPdf. -->
+<!-- Edital do processo seletivo de Aspirantes à Glia 2026.2, aberto pela bolinha flutuante (assets/edital.js).
+     Fonte única: LANAP_Edital_Aspirantes_a_Glia_2026 v2 (10 p.), "edital atualizado", enviado por Diogo em 11/11/2026 21:36 (hash em hashes.sha256),
+     arquivado em LANAP-entregas/2026-11-11/edital-aspirantes-2026-2/. O texto abaixo transcreve o PDF; o resumo e as perguntas só remetem a ele.
+     PENDENTE antes de publicar: o Art. 5º do PDF aponta o formulário antigo (forms.gle/mJFJgbD2LPTHoJVH6); o site usa o novo. -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Processo seletivo 2026.2 · LANAP</title>
+<title>Edital · Aspirantes à Glia 2026.2 · LANAP</title>
 <link rel="icon" href="assets/lanap-symbol-teal.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-  :root { --navy:#1F334C; --teal:#0D767D; --papel:#FBF9F5; --linha:#D9D2C4; --texto:#2F3B48; --cinza:#6B7684; }
+  :root { --navy:#1F334C; --teal:#0D767D; --tc:#5CC4C9; --papel:#FBF9F5; --creme:#F6F2EA; --linha:#D9D2C4; --texto:#2F3B48; --cinza:#6B7684; }
   * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; scroll-padding-top:16px; }
   body { font:16px/1.7 Inter, Arial, sans-serif; color:var(--texto); background:var(--papel); }
-  main { max-width:760px; margin:0 auto; padding:44px 22px 80px; }
+  main { max-width:780px; margin:0 auto; padding:40px 22px 90px; }
+  a { color:var(--navy); }
   .rotulo { font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--teal); }
   h1 { font:500 clamp(30px, 5vw, 44px)/1.1 "Source Serif 4", Georgia, serif; color:var(--navy); margin:10px 0 8px; }
-  h2 { font:500 23px/1.25 "Source Serif 4", Georgia, serif; color:var(--navy); margin:38px 0 12px; padding-top:18px; border-top:1px solid var(--linha); display:flex; gap:12px; align-items:baseline; }
-  h2 span { font-size:15px; color:var(--teal); }
-  p + p { margin-top:12px; }
-  .resumo { margin-top:26px; border-top:1px solid var(--navy); }
-  .resumo div { display:grid; grid-template-columns:150px 1fr; gap:14px; padding:12px 0; border-bottom:1px solid var(--linha); }
+  h2 { font:500 25px/1.2 "Source Serif 4", Georgia, serif; color:var(--navy); margin:46px 0 14px; padding-top:18px; border-top:1px solid var(--navy); }
+  h3 { font:500 20px/1.3 "Source Serif 4", Georgia, serif; color:var(--navy); margin:30px 0 10px; display:flex; gap:12px; align-items:baseline; }
+  h3 span { font:600 11px Inter, Arial, sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); }
+  p + p { margin-top:10px; }
+  .chapeu { font:19px/1.5 "Source Serif 4", Georgia, serif; color:var(--navy); opacity:.9; }
+
+  .resumo { margin-top:24px; border-top:1px solid var(--navy); }
+  .resumo div { display:grid; grid-template-columns:140px 1fr; gap:14px; padding:11px 0; border-bottom:1px solid var(--linha); }
   .resumo dt { font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--cinza); }
   .resumo dd { color:var(--navy); font-weight:500; }
-  ul, ol { margin:10px 0 0 20px; }
-  li + li { margin-top:6px; }
-  .pdf { margin-top:28px; padding:16px 18px; border-left:3px solid var(--teal); background:#EAF4F3; font-size:15px; }
-  .pdf a { color:var(--navy); font-weight:600; }
-  .completo { margin-top:44px; padding-top:18px; border-top:1px solid var(--navy); }
-  .completo .acoes { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 16px; }
-  .completo .acoes a { flex:1 1 200px; text-align:center; padding:13px 16px; border:1px solid var(--teal); color:var(--navy); text-decoration:none; font-weight:600; font-size:14px; }
-  .completo .acoes a.cheio { background:var(--teal); color:#fff; }
-  .visor { width:100%; height:min(80vh, 900px); border:1px solid var(--linha); background:#fff; }
-  .sem-arquivo { padding:28px 20px; border:1px dashed var(--linha); text-align:center; color:var(--cinza); font-size:15px; }
+
+  .acoes { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+  .acoes a { flex:1 1 210px; display:flex; justify-content:center; align-items:center; padding:13px 16px; border:1px solid var(--teal); color:var(--navy); text-decoration:none; font-weight:600; font-size:14px; background:#fff; }
+  .acoes a.cheio { background:var(--teal); color:#fff; }
+
+  .pendente { margin-top:22px; padding:14px 16px; border-left:3px solid #B5651D; background:#FFF6EA; font-size:14.5px; }
+
+  /* Perguntas frequentes */
+  .faq { margin-top:8px; border-top:1px solid var(--linha); }
+  .faq details { border-bottom:1px solid var(--linha); }
+  .faq summary { list-style:none; cursor:pointer; padding:15px 34px 15px 0; position:relative; font-weight:500; color:var(--navy); }
+  .faq summary::-webkit-details-marker { display:none; }
+  .faq summary::after { content:"+"; position:absolute; right:4px; top:12px; font:400 24px/1 "Source Serif 4", serif; color:var(--teal); transition:transform .25s; }
+  .faq details[open] summary::after { transform:rotate(45deg); }
+  .faq .r { padding:0 0 16px; font-size:15px; }
+  .faq .r a { font-size:13px; font-weight:600; color:var(--teal); text-decoration:none; white-space:nowrap; }
+
+  /* Texto integral */
+  .art { margin-top:12px; }
+  .art b.n { color:var(--navy); }
+  .art .par { margin-top:8px; padding-left:16px; border-left:2px solid var(--linha); }
+  .art :target, .alvo { animation:realce 2s ease; }
+  @keyframes realce { 0% { background:#DFF1EF; } 100% { background:transparent; } }
+  ol.inc, ul.lis { margin:10px 0 0 22px; }
+  ol.inc li + li, ul.lis li + li { margin-top:6px; }
+  .quadro { width:100%; border-collapse:collapse; margin:14px 0; font-size:14.5px; }
+  .quadro th { text-align:left; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cinza); padding:9px 8px 9px 0; border-bottom:1px solid var(--navy); }
+  .quadro td { padding:10px 8px 10px 0; border-bottom:1px solid var(--linha); vertical-align:top; }
+  .quadro td.pt { text-align:right; font-family:"Source Serif 4", serif; font-size:17px; color:var(--teal); white-space:nowrap; }
+  .nota { font-size:13.5px; color:var(--cinza); margin-top:8px; }
+  .visor { width:100%; height:80vh; border:1px solid var(--linha); background:#fff; margin-top:16px; }
+  .so-tela-grande { display:block; }
   footer { margin-top:56px; padding-top:18px; border-top:1px solid var(--linha); font-size:13px; color:var(--cinza); }
-  @media (max-width:560px) { .resumo div { grid-template-columns:1fr; gap:2px; } }
+  @media (max-width:760px) { .resumo div { grid-template-columns:1fr; gap:2px; } .so-tela-grande { display:none; } }
 </style>
 </head>
 <body>
 <main>
   <span class="rotulo">LANAP · Liga Acadêmica de Neurociência Aplicada · UniBH Vespasiano</span>
-  <h1>Processo seletivo de aspirantes 2026.2</h1>
-  <p>Seleção de novos membros da LANAP.</p>
+  <h1>Edital de Seleção de Aspirantes à Glia</h1>
+  <p class="chapeu">Processo seletivo do 2º semestre de 2026</p>
 
   <dl class="resumo">
-    <div><dt>Inscrições</dt><dd>de 11/11/2026 a 30/11/2026, às 23h59 (horário de Brasília)</dd></div>
-    <div><dt>Público</dt><dd>Estudantes do curso de Medicina da UniBH Vespasiano</dd></div>
-    <div><dt>Documentos</dt><dd>Carta de intenção e currículo Lattes, em PDF</dd></div>
+    <div><dt>Vagas</dt><dd>15, em classificação única, com cadastro de reserva</dd></div>
+    <div><dt>Público</dt><dd>Estudantes regularmente matriculados em Medicina, de qualquer instituição de ensino superior</dd></div>
+    <div><dt>Inscrições</dt><dd>11/11/2026 (20h) a 30/11/2026 (23h59), pelo formulário oficial</dd></div>
+    <div><dt>Contribuição</dt><dd>2 kg de alimento não perecível, como inscrição solidária</dd></div>
+    <div><dt>Avaliação</dt><dd>Carta de intenção (70 pontos) e Currículo Lattes (30 pontos)</dd></div>
+    <div><dt>Resultado final</dt><dd>04/12/2026, às 18h</dd></div>
     <div><dt>Contato</dt><dd>fasehlanap@gmail.com</dd></div>
   </dl>
 
-  <div class="pdf" data-pdf>Leia o <b>edital completo</b>, especialmente os <b>Anexos I e II</b>, antes de enviar. <span data-pdf-link>O PDF do edital estará disponível aqui.</span></div>
+  <div class="acoes">
+    <a class="cheio" href="assets/LANAP_Edital_Aspirantes_a_Glia_2026.pdf" target="_blank" rel="noopener">Abrir o PDF oficial</a>
+    <a href="assets/LANAP_Edital_Aspirantes_a_Glia_2026.pdf" download>Baixar o PDF</a>
+    <a href="#integral">Ler o edital completo aqui ↓</a>
+  </div>
 
-  <h2><span>01</span>O que enviar</h2>
-  <ul>
-    <li><b>Carta de intenção</b> em PDF, até 10 MB, com o nome sugerido <code>Carta_de_intencao.pdf</code>. A carta <b>não pode conter dados que identifiquem você</b>.</li>
-    <li><b>Currículo Lattes</b> em PDF, até 10 MB, com o nome sugerido <code>Lattes.pdf</code>.</li>
-  </ul>
 
-  <h2><span>02</span>Dados pedidos no formulário</h2>
-  <p>Nome completo, telefone com DDD, instituição de ensino, número de matrícula e período atual.</p>
+  <h2>Perguntas frequentes</h2>
+  <div class="faq">
+    <details><summary>Quem pode se inscrever?</summary><div class="r">Estudantes regularmente matriculados no curso de graduação em Medicina, de qualquer instituição de ensino superior, que apresentem a documentação e concordem com o edital. Não é exigida experiência prévia em pesquisa. <a href="#art4">Art. 4º →</a></div></details>
+    <details><summary>Quantas vagas há? Existe preferência por período ou instituição?</summary><div class="r">São 15 vagas, em classificação única, sem reserva, divisão ou preferência por período ou instituição. Os classificados além das vagas formam o cadastro de reserva. <a href="#art2">Art. 2º →</a></div></details>
+    <details><summary>Quais documentos preciso enviar?</summary><div class="r">Nome completo, instituição, matrícula, curso, período, e-mail, telefone e o link público do Currículo Lattes; além de comprovante de matrícula atualizado, carta de intenção e Currículo Lattes, em PDF. <a href="#art6">Art. 6º →</a></div></details>
+    <details><summary>Como funciona a contribuição de 2 kg de alimento?</summary><div class="r">A inscrição é solidária: entregue 2 kg de alimento não perecível, de 12/11/2026 até o fim das inscrições, na caixa de coleta da LANAP na recepção da UniBH Vespasiano, com a sacola identificada com seu nome completo. Anexe uma foto do alimento entregue ao final do formulário. Se não puder entregar no local, peça uma alternativa à Comissão por fasehlanap@gmail.com antes do encerramento. A contribuição não interfere na avaliação. <a href="#art6">Art. 6º, §§ 1º a 3º →</a></div></details>
+    <details><summary>Como deve ser a carta de intenção?</summary><div class="r">Própria, em português, em PDF, com no máximo uma página, Arial ou Times New Roman 12, espaçamento 1,5 e margens de 2,5 cm, seguindo os cinco pontos do Anexo I. Não pode ter nome, matrícula, curso, período, turma, instituição ou outra informação que identifique você. <a href="#art10">Arts. 10 e 11 →</a> <a href="#anexo1">Anexo I →</a></div></details>
+    <details><summary>Ainda não tenho Lattes, ou ele está vazio. Posso participar?</summary><div class="r">Sim. A ausência de atividades no Lattes não impede a inscrição nem a classificação: a carta vale 70% da nota. Quem não tem currículo deve se cadastrar com antecedência, porque a publicação de um currículo novo pode não ser imediata. <a href="#art15">Art. 15 →</a> <a href="#anexo2">Anexo II →</a></div></details>
+    <details><summary>Como o Currículo Lattes é avaliado?</summary><div class="r">Em cinco critérios, somando 30 pontos: atividades científicas (8), publicações e apresentações (6), extensão (6), representação e organização (5) e formação complementar (5). Só contam atividades registradas até o fim das inscrições, e cada uma é pontuada uma única vez. <a href="#anexo3">Anexo III →</a></div></details>
+    <details><summary>Como é calculada a nota e como funciona o desempate?</summary><div class="r">Carta e Lattes são avaliados, cada um, por dois avaliadores independentes; a nota de cada parte é a média das duas avaliações, e a nota final é a soma. No empate: maior nota na carta, depois no critério "Disponibilidade e compromisso", depois em "Contribuição concreta e disposição para aprender" e, por fim, sorteio. <a href="#art18">Arts. 18 e 20 →</a></div></details>
+    <details><summary>Posso enviar mais de uma vez?</summary><div class="r">Sim. Vale a última submissão completa recebida até o encerramento. Guarde o comprovante de envio. <a href="#art7">Art. 7º →</a></div></details>
+    <details><summary>Errei um arquivo. Dá para corrigir?</summary><div class="r">No prazo de recurso contra a homologação, é possível corrigir arquivo ilegível, identificação indevida na carta, comprovação de matrícula, comprovante da contribuição solidária e link do Lattes ausente ou inválido. Não é possível mudar o conteúdo da carta nem acrescentar ao Lattes atividades não registradas até o fim das inscrições. <a href="#art9">Art. 9º →</a></div></details>
+    <details><summary>Quando sai o resultado?</summary><div class="r">Resultado preliminar em 02/12/2026, às 18h; recursos até 03/12, às 18h; resultado final e convocação em 04/12, às 18h; confirmação de interesse até 07/12, às 23h59. <a href="#anexo4">Anexo IV →</a></div></details>
+    <details><summary>Como faço um recurso?</summary><div class="r">Pelo e-mail fasehlanap@gmail.com, com nome, código, ato recorrido, fundamentação e pedido específico, nos prazos do Anexo IV. Há 24 horas completas para recurso depois do resultado preliminar e da ficha de avaliação. <a href="#art22">Art. 22 →</a></div></details>
+    <details><summary>O que acontece se eu for aprovado?</summary><div class="r">Você ingressa como Membro da Glia e atua inicialmente no Programa de Produção Científica e no Núcleo Cultural. Funções de organização são opcionais. É preciso confirmar o interesse por e-mail até 07/12/2026. <a href="#art3">Art. 3º →</a> <a href="#art24">Art. 24 →</a></div></details>
+  </div>
 
-  <h2><span>03</span>Declarações obrigatórias</h2>
-  <ol>
-    <li>Li e concordo com todas as regras do edital.</li>
-    <li>A carta de intenção é de minha autoria e não contém informações que me identifiquem.</li>
-    <li>Estou ciente de que todos os aspirantes atuarão inicialmente no Programa de Produção Científica e no Núcleo Cultural.</li>
-    <li>Autorizo o uso dos meus dados e documentos exclusivamente para a organização e a avaliação deste processo seletivo.</li>
-    <li>Acompanharei as comunicações oficiais pelo e-mail cadastrado e pelos canais da LANAP.</li>
-  </ol>
+  <h2 id="integral">Edital completo</h2>
+  <p class="nota">Transcrição integral do PDF oficial. Em caso de divergência, vale o PDF.</p>
 
-  <h2><span>04</span>Como enviar</h2>
-  <ol>
-    <li>Abra o formulário no navegador (Chrome ou Safari), não dentro do WhatsApp ou do Instagram.</li>
-    <li>Entre com uma conta Google. O formulário exige login para enviar arquivos e registra o nome e o e-mail da conta.</li>
-    <li>Preencha os dados, anexe os dois PDFs, marque as declarações e envie.</li>
-  </ol>
+  <div class="art">
+    <p>A Diretoria da Liga Acadêmica de Neurociência Aplicada torna público o processo seletivo para preenchimento de 15 (quinze) vagas de Aspirantes à Glia, destinado aos estudantes de graduação em Medicina, mediante avaliação de carta de intenção e do Currículo Lattes.</p>
 
-  <section class="completo" id="completo">
-    <span class="rotulo">Documento oficial</span>
-    <h2 style="border:0;margin-top:6px;padding-top:0"><span>05</span>Edital completo</h2>
-    <div data-visor><div class="sem-arquivo">O arquivo completo do edital, com os Anexos I e II, será exibido aqui.</div></div>
-  </section>
+    <h3><span>Seção 01</span>Disposições preliminares e vagas</h3>
+    <p id="art1"><b class="n">Art. 1º</b> Este edital regulamenta a seleção de Aspirantes à Glia no segundo semestre de 2026, observados critérios iguais de avaliação, transparência, impessoalidade e direito a recurso.</p>
+    <p class="par">Parágrafo único. Na LANAP, Membros da Glia é o nome dado a todos os membros da Liga e substitui a antiga designação de “ligantes”: integrar a Glia é ser membro da LANAP. Aspirantes à Glia são os estudantes que buscam esse ingresso por meio deste processo seletivo.</p>
+    <p id="art2"><b class="n">Art. 2º</b> São ofertadas 15 (quinze) vagas, em classificação única, sem reserva de vagas, divisão ou preferência por período ou instituição de ensino. Os candidatos classificados além das vagas integrarão cadastro de reserva, na ordem do resultado final.</p>
+    <p id="art3"><b class="n">Art. 3º</b> Os aprovados, independentemente do período, ingressarão na Liga como Membros da Glia e atuarão inicialmente no Programa de Produção Científica e no Núcleo Cultural. Poderão participar de funções de organização dessas frentes, conforme interesse e processo interno de designação. Essa participação é opcional e não constitui requisito de ingresso ou permanência na Liga.</p>
 
-  <footer>Resumo elaborado a partir do formulário oficial de inscrição. Em caso de divergência, vale o edital completo. LANAP · Liga Acadêmica de Neurociência Aplicada · Curso de Medicina · UniBH Vespasiano · fasehlanap@gmail.com</footer>
+    <h3><span>Seção 02</span>Requisitos e inscrições</h3>
+    <p id="art4"><b class="n">Art. 4º</b> Poderão se inscrever estudantes regularmente matriculados no curso de graduação em Medicina, de qualquer instituição de ensino superior, que apresentem a documentação exigida e concordem com este edital. Não será exigida experiência prévia em pesquisa.</p>
+    <p id="art5"><b class="n">Art. 5º</b> As inscrições ocorrerão de 11 de novembro de 2026, às 20h00, a 30 de novembro de 2026, às 23h59, exclusivamente pelo formulário oficial. Todos os horários seguem o horário de Brasília.</p>
+    <p class="par">Parágrafo único. Formulário de inscrição: https://forms.gle/mJFJgbD2LPTHoJVH6.</p>
+    <p id="art6"><b class="n">Art. 6º</b> O candidato deverá informar nome completo, instituição de ensino, matrícula, curso, período, e-mail, telefone e o link público do seu Currículo Lattes; anexar comprovante de matrícula atualizado, carta de intenção e Currículo Lattes, em PDF; e declarar ciência das regras. Todos os documentos serão anexados pelo candidato no próprio formulário.</p>
+    <p class="par">§ 1º A inscrição é solidária e está condicionada à entrega de 2 kg (dois quilos) de alimento não perecível, de 12/11/2026 até o encerramento das inscrições, na caixa de coleta da LANAP instalada na recepção da UniBH - Campus Vespasiano. A sacola deverá ser identificada com o nome completo do candidato.</p>
+    <p class="par">§ 2º O comprovante da entrega será uma foto do alimento entregue, anexada ao final do formulário de inscrição. Candidatos impossibilitados de realizar a entrega no local poderão solicitar alternativa à Comissão pelo e-mail fasehlanap@gmail.com, antes do encerramento das inscrições.</p>
+    <p class="par">§ 3º Os alimentos arrecadados serão destinados a ações sociais da LANAP, sem qualquer reflexo na avaliação ou na classificação dos candidatos.</p>
+    <p id="art7"><b class="n">Art. 7º</b> O envio completo deverá ser concluído dentro do prazo. Em caso de mais de uma inscrição, prevalecerá a última submissão completa recebida até o encerramento. O candidato deverá conservar o comprovante de envio e acompanhar as comunicações oficiais.</p>
+
+    <h3><span>Seção 03</span>Documentação e homologação</h3>
+    <p id="art8"><b class="n">Art. 8º</b> A Comissão conferirá o vínculo acadêmico e a documentação. Serão indeferidas inscrições fora do prazo, de candidatos sem o vínculo exigido ou com documentos ausentes, ilegíveis ou incompatíveis com este edital, ressalvada a regularização prevista no artigo seguinte.</p>
+    <p id="art9"><b class="n">Art. 9º</b> No prazo de recurso contra a homologação, poderão ser corrigidos arquivos ilegíveis, identificação indevida na carta de intenção, falhas de comprovação de matrícula, falhas no comprovante da contribuição solidária e link do Currículo Lattes ausente ou inválido. A correção não poderá alterar o conteúdo avaliativo da carta de intenção, incluir documento não enviado no prazo ou acrescentar ao Currículo Lattes atividades não registradas até o encerramento das inscrições. A Comissão verificará a correspondência com os documentos originais.</p>
+
+    <h3><span>Seção 04</span>Carta de intenção</h3>
+    <p id="art10"><b class="n">Art. 10.</b> A carta de intenção deverá ser de autoria própria, redigida em português, em PDF, com no máximo uma página, fonte Arial ou Times New Roman, tamanho 12, espaçamento 1,5 e margens de 2,5 cm. Deverá contemplar o roteiro do Anexo I.</p>
+    <p id="art11"><b class="n">Art. 11.</b> A carta não deverá conter nome, matrícula, curso, período, turma, instituição de ensino, nomes de docentes ou outras informações que permitam identificar diretamente o candidato. Experiências poderão ser apresentadas de forma geral, sem nomes de pessoas, projetos ou instituições que revelem sua identidade.</p>
+    <p id="art12"><b class="n">Art. 12.</b> A Secretaria da Comissão atribuirá um código a cada candidatura e encaminhará a carta de intenção aos avaliadores em arquivo identificado somente por esse código. A identificação acadêmica permanecerá na documentação administrativa.</p>
+    <p id="art13"><b class="n">Art. 13.</b> O candidato responde pela autoria e veracidade do texto. Plágio, falsificação ou apresentação de texto de autoria de terceiros poderão resultar em desclassificação, mediante fundamentação e oportunidade de manifestação. Revisão ortográfica não substitui a autoria intelectual. A mera impressão de estilo ou resultado de detector automatizado não bastará para comprovar irregularidade.</p>
+
+    <h3><span>Seção 05</span>Currículo Lattes</h3>
+    <p id="art14"><b class="n">Art. 14.</b> O candidato deverá anexar seu Currículo Lattes em PDF, gerado na Plataforma Lattes do CNPq e atualizado até a data da inscrição, e informar o respectivo link público, conforme o Anexo II. Serão consideradas somente as atividades registradas no currículo até o encerramento das inscrições.</p>
+    <p id="art15"><b class="n">Art. 15.</b> O Currículo Lattes será avaliado separadamente da carta de intenção, pois contém identificação, conforme os critérios do Anexo III. Serão consideradas atividades acadêmicas, científicas, de extensão e de representação, além de cursos, publicações e demais experiências relevantes, observado o limite de pontos de cada critério.</p>
+    <p class="par">Parágrafo único. A ausência de atividades no Currículo Lattes não impede a inscrição nem a classificação; nesse caso, o candidato será avaliado pela carta de intenção e receberá a pontuação correspondente aos critérios do currículo.</p>
+    <p id="art16"><b class="n">Art. 16.</b> A Comissão poderá solicitar ao candidato a comprovação de qualquer atividade declarada. Atividades não comprovadas no prazo indicado não serão pontuadas. A declaração de informação falsa poderá resultar em desclassificação, mediante fundamentação e oportunidade de manifestação.</p>
+
+    <h3><span>Seção 06</span>Avaliação e classificação</h3>
+    <p id="art17"><b class="n">Art. 17.</b> A seleção consistirá exclusivamente na avaliação documental da carta de intenção e do Currículo Lattes, sem prova ou entrevista. A carta de intenção valerá até 70 pontos e o Currículo Lattes até 30 pontos, conforme o Anexo III, totalizando 100 pontos.</p>
+    <p id="art18"><b class="n">Art. 18.</b> A carta de intenção e o Currículo Lattes serão avaliados, cada um, por dois avaliadores, de forma independente. A nota de cada componente será a média aritmética das duas avaliações. A nota final será a soma dessas médias. O cálculo utilizará os valores sem arredondamento intermediário; as notas divulgadas terão duas casas decimais.</p>
+    <p id="art19"><b class="n">Art. 19.</b> A Comissão manterá registro da pontuação por critério e das respectivas justificativas. Avaliadores que possuam relação pessoal próxima com o candidato ou outro conflito de interesse deverão se declarar impedidos e ser substituídos. A escolha de funções organizacionais não integrará a pontuação.</p>
+    <p id="art20"><b class="n">Art. 20.</b> A classificação observará a ordem decrescente da nota final. Em caso de empate nos valores sem arredondamento, serão aplicados, sucessivamente, os seguintes critérios de desempate:</p>
+    <ol class="inc" type="I">
+      <li>maior nota na carta de intenção;</li>
+      <li>maior nota no critério “Disponibilidade e compromisso”;</li>
+      <li>maior nota no critério “Contribuição concreta e disposição para aprender”;</li>
+      <li>persistindo o empate, sorteio registrado pela Comissão.</li>
+    </ol>
+
+    <h3><span>Seção 07</span>Resultados e recursos</h3>
+    <p id="art21"><b class="n">Art. 21.</b> As homologações e os resultados serão divulgados nos canais oficiais da LANAP e comunicados ao e-mail cadastrado. Os resultados identificarão os candidatos por código, com as notas da carta de intenção e do Currículo Lattes, nota final, classificação e situação. Cada candidato receberá seu código por e-mail.</p>
+    <p id="art22"><b class="n">Art. 22.</b> Caberá recurso contra o indeferimento da inscrição e contra o resultado preliminar, nos prazos do Anexo IV, pelo e-mail fasehlanap@gmail.com. O recurso deverá informar nome, código (quando disponível), ato recorrido, fundamentação e pedido específico.</p>
+    <p class="par">Parágrafo único. A Comissão encaminhará a cada candidato sua ficha de avaliação por e-mail, juntamente com o resultado preliminar. O prazo recursal individual começará após a disponibilização do resultado e da respectiva ficha, asseguradas 24 horas completas para recurso.</p>
+    <p id="art23"><b class="n">Art. 23.</b> A Comissão decidirá os recursos de forma fundamentada e comunicará a resposta individualmente. Não serão aceitos recursos fora do prazo ou sem indicação do ponto a revisar. O recurso não permite reformular a carta de intenção nem atualizar o Currículo Lattes, ressalvadas as correções formais do Art. 9º.</p>
+    <p id="art24"><b class="n">Art. 24.</b> Os 15 primeiros candidatos na classificação final, com inscrição homologada, serão convocados e deverão confirmar interesse por resposta ao e-mail de convocação até 07/12/2026, às 23h59. A falta de confirmação será considerada desistência. Vagas remanescentes serão oferecidas ao cadastro de reserva, em ordem, com 48 horas para resposta a cada convocação.</p>
+
+    <h3><span>Seção 08</span>Disposições finais</h3>
+    <p id="art25"><b class="n">Art. 25.</b> A Comissão será designada pela Diretoria e responderá pela conferência documental, codificação, avaliação, recursos e resultado final. Os dados, as cartas e os currículos serão utilizados para organização e avaliação do processo, com acesso restrito aos responsáveis por cada atividade, e não serão divulgados publicamente.</p>
+    <p id="art26"><b class="n">Art. 26.</b> Alterações deste edital deverão ser publicadas nos mesmos canais oficiais, preservando os critérios de avaliação e os prazos necessários aos candidatos. Os casos omissos serão decididos de forma fundamentada, sem criação posterior de critérios de pontuação ou preferências por período ou instituição.</p>
+    <p id="art27"><b class="n">Art. 27.</b> Integram este edital, com a mesma força de suas disposições, os Anexos I a IV, apresentados a seguir.</p>
+
+    <h3 id="anexo1"><span>Anexo I</span>Orientações para a carta de intenção</h3>
+    <p>Redija um texto contínuo, com no máximo uma página. Não é necessário copiar as perguntas ou usar subtítulos. Apresente interesses e disponibilidade reais, observando a formatação e a anonimização dos Arts. 10 e 11.</p>
+    <p><b>Conteúdo obrigatório</b></p>
+    <ol class="inc">
+      <li><b>Motivação:</b> por que deseja ingressar na Glia da LANAP e qual é seu interesse pela neurociência?</li>
+      <li><b>Compreensão da Liga:</b> como entende a contribuição da LANAP para sua formação e as atividades em que pretende colaborar?</li>
+      <li><b>Contribuição:</b> que interesses, habilidades ou iniciativas pode trazer e o que está disposto a aprender? Não é necessário possuir experiência prévia em pesquisa.</li>
+      <li><b>Disponibilidade:</b> como pretende conciliar as atividades da Liga com a rotina acadêmica? Indique, de forma realista, os períodos de disponibilidade e as limitações relevantes.</li>
+      <li><b>Expectativas:</b> o que espera aprender e desenvolver durante sua participação?</li>
+    </ol>
+    <p class="nota">Ao apresentar contribuições e expectativas, considere que todos os aprovados atuarão inicialmente no Programa de Produção Científica e no Núcleo Cultural (Art. 3º). Não é necessário assumir ou manifestar interesse em funções organizacionais.</p>
+    <p><b>Conferência antes do envio</b></p>
+    <ul class="lis">
+      <li>PDF com no máximo uma página; Arial ou Times New Roman 12; espaçamento 1,5; margens de 2,5 cm.</li>
+      <li>Sem nome, assinatura, matrícula, curso, período, turma, instituição de ensino ou referências que revelem a identidade.</li>
+      <li>Conteúdo próprio, com os cinco pontos contemplados.</li>
+      <li>Nome do arquivo: Carta_de_intencao.pdf. Não incluir identificação no nome do arquivo.</li>
+    </ul>
+
+    <h3 id="anexo2"><span>Anexo II</span>Orientações para o Currículo Lattes</h3>
+    <p>O Currículo Lattes é a plataforma oficial do CNPq para registro da trajetória acadêmica. O cadastro é gratuito e pode ser feito por qualquer estudante, mesmo sem experiência prévia em pesquisa.</p>
+    <p><b>Como preparar</b></p>
+    <ol class="inc">
+      <li>Atualize o currículo na Plataforma Lattes, registrando as atividades realizadas até a data da inscrição.</li>
+      <li>Gere a versão em PDF do currículo completo pela própria plataforma.</li>
+      <li>Copie o link público do currículo e informe-o no formulário de inscrição.</li>
+    </ol>
+    <p class="nota">Quem ainda não possui Currículo Lattes deve se cadastrar com antecedência: a publicação de um currículo novo na plataforma pode não ser imediata. A ausência do link público no momento da inscrição poderá ser corrigida no prazo de recurso contra a homologação (Art. 9º).</p>
+    <p><b>O que será considerado</b></p>
+    <ul class="lis">
+      <li>Atividades científicas: iniciação científica, projetos e grupos de pesquisa;</li>
+      <li>Publicações e apresentações: artigos, resumos e trabalhos apresentados em eventos;</li>
+      <li>Extensão: projetos e ações de extensão universitária;</li>
+      <li>Representação e organização: ligas acadêmicas, diretórios, comissões e organização de eventos;</li>
+      <li>Formação complementar: cursos, monitorias e participação em eventos.</li>
+    </ul>
+    <p><b>Conferência antes do envio</b></p>
+    <ul class="lis">
+      <li>PDF do currículo completo, atualizado até a data da inscrição.</li>
+      <li>Link público do currículo informado no formulário.</li>
+      <li>Nome do arquivo sugerido: Curriculo_Lattes.pdf.</li>
+    </ul>
+
+    <h3 id="anexo3"><span>Anexo III</span>Critérios de avaliação</h3>
+    <p>Cada avaliador atribuirá a cada critério um dos seguintes percentuais da pontuação máxima: 0%, 25%, 50%, 75% ou 100%. Os registros deverão indicar os elementos que sustentam a avaliação.</p>
+    <table class="quadro">
+      <caption style="text-align:left;font-weight:600;color:var(--navy);padding:6px 0">Quadro 1 · Carta de intenção (70 pontos)</caption>
+      <thead><tr><th>Critério</th><th style="text-align:right">Pontos</th></tr></thead>
+      <tbody>
+        <tr><td>Motivação e interesse pela neurociência</td><td class="pt">15</td></tr>
+        <tr><td>Compreensão da LANAP e da atuação pretendida</td><td class="pt">15</td></tr>
+        <tr><td>Contribuição concreta e disposição para aprender</td><td class="pt">15</td></tr>
+        <tr><td>Disponibilidade e compromisso</td><td class="pt">15</td></tr>
+        <tr><td>Clareza, coerência e organização</td><td class="pt">10</td></tr>
+        <tr><td><b>Total</b></td><td class="pt"><b>70</b></td></tr>
+      </tbody>
+    </table>
+    <table class="quadro">
+      <thead><tr><th>Percentual</th><th>Referência de julgamento (carta)</th></tr></thead>
+      <tbody>
+        <tr><td>0%</td><td>Aspecto ausente ou sem elementos pertinentes</td></tr>
+        <tr><td>25%</td><td>Abordagem genérica e pouco desenvolvida</td></tr>
+        <tr><td>50%</td><td>Abordagem pertinente, com desenvolvimento parcial</td></tr>
+        <tr><td>75%</td><td>Abordagem clara, consistente e bem desenvolvida</td></tr>
+        <tr><td>100%</td><td>Abordagem específica, coerente e plenamente desenvolvida</td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Em disponibilidade, avaliam-se viabilidade e compromisso, não a maior quantidade de horas livres. Não se exige experiência prévia nem se privilegia período ou instituição de ensino.</p>
+    <table class="quadro">
+      <caption style="text-align:left;font-weight:600;color:var(--navy);padding:6px 0">Quadro 2 · Currículo Lattes (30 pontos)</caption>
+      <thead><tr><th>Critério</th><th>Exemplos de atividades</th><th style="text-align:right">Pontos</th></tr></thead>
+      <tbody>
+        <tr><td>Atividades científicas</td><td>Iniciação científica, projetos e grupos de pesquisa</td><td class="pt">8</td></tr>
+        <tr><td>Publicações e apresentações</td><td>Artigos, resumos e trabalhos apresentados em eventos</td><td class="pt">6</td></tr>
+        <tr><td>Extensão</td><td>Projetos e ações de extensão universitária</td><td class="pt">6</td></tr>
+        <tr><td>Representação e organização</td><td>Ligas acadêmicas, diretórios, comissões e organização de eventos</td><td class="pt">5</td></tr>
+        <tr><td>Formação complementar</td><td>Cursos, monitorias e participação em eventos</td><td class="pt">5</td></tr>
+        <tr><td><b>Total</b></td><td></td><td class="pt"><b>30</b></td></tr>
+      </tbody>
+    </table>
+    <table class="quadro">
+      <thead><tr><th>Percentual</th><th>Referência de julgamento (Lattes)</th></tr></thead>
+      <tbody>
+        <tr><td>0%</td><td>Nenhuma atividade registrada no critério</td></tr>
+        <tr><td>25%</td><td>Registro pontual, de curta duração</td></tr>
+        <tr><td>50%</td><td>Participação regular em uma atividade</td></tr>
+        <tr><td>75%</td><td>Participação em mais de uma atividade ou com continuidade</td></tr>
+        <tr><td>100%</td><td>Participação consistente e contínua, com responsabilidade ou produto</td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Cada atividade será pontuada uma única vez, no critério mais adequado. A ausência de experiências não impede a classificação: a carta de intenção corresponde a 70% da nota final.</p>
+
+    <h3 id="anexo4"><span>Anexo IV</span>Cronograma</h3>
+    <table class="quadro">
+      <thead><tr><th>Etapa</th><th>Data ou prazo</th></tr></thead>
+      <tbody>
+        <tr><td>Inscrições e envio dos documentos</td><td>11/11/2026 (20h00) a 30/11/2026 (23h59)</td></tr>
+        <tr><td>Homologação preliminar das inscrições</td><td>01/12/2026, às 12h</td></tr>
+        <tr><td>Recursos e correções formais</td><td>Até 02/12/2026, às 12h</td></tr>
+        <tr><td>Homologação definitiva</td><td>02/12/2026, às 14h</td></tr>
+        <tr><td>Avaliação da carta de intenção e do Currículo Lattes</td><td>01 e 02/12/2026</td></tr>
+        <tr><td>Resultado preliminar</td><td>02/12/2026, às 18h</td></tr>
+        <tr><td>Recursos contra o resultado</td><td>Até 03/12/2026, às 18h</td></tr>
+        <tr><td>Resultado final e convocação</td><td>04/12/2026, às 18h</td></tr>
+        <tr><td>Confirmação de interesse</td><td>Até 07/12/2026, às 23h59</td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Todos os horários seguem o horário de Brasília. As divulgações que abrem prazo recursal serão feitas no horário indicado. Se houver atraso, a Comissão comunicará novo prazo integral de 24 horas a partir da divulgação efetiva.</p>
+    <p style="margin-top:18px">Vespasiano, 11 de novembro de 2026.<br><b>Presidência LANAP</b></p>
+  </div>
+
+  <div class="so-tela-grande">
+    <h2>PDF oficial</h2>
+    <iframe class="visor" src="assets/LANAP_Edital_Aspirantes_a_Glia_2026.pdf" title="PDF oficial do edital" loading="lazy"></iframe>
+  </div>
+
+  <footer>LANAP · Liga Acadêmica de Neurociência Aplicada · Curso de Medicina · UniBH Vespasiano · fasehlanap@gmail.com</footer>
 </main>
 <script>
-  // O link do edital completo chega por ?pdf= (enviado pela bolinha, assets/edital.js).
-  (function () {
-    var pdf = new URLSearchParams(location.search).get('pdf') || '';
-    if (!pdf) return;
-    var drive = pdf.match(/drive\.google\.com\/file\/d\/([^/?#]+)/);
-    var ver = drive ? 'https://drive.google.com/file/d/' + drive[1] + '/preview' : pdf;
-    var baixar = drive ? 'https://drive.google.com/uc?export=download&id=' + drive[1] : pdf;
-    document.querySelector('[data-pdf-link]').innerHTML = '<a href="#completo">Ver o edital completo abaixo ↓</a>';
-    document.querySelector('[data-visor]').innerHTML =
-      '<div class="acoes"><a class="cheio" href="' + ver + '" target="_blank" rel="noopener">Abrir em tela cheia</a>' +
-      '<a href="' + baixar + '" target="_blank" rel="noopener"' + (drive ? '' : ' download') + '>Baixar o PDF</a></div>' +
-      '<iframe class="visor" src="' + ver + '" title="Edital completo do processo seletivo 2026.2" loading="lazy"></iframe>';
-  })();
+  // Ao seguir um link das perguntas, a resposta no edital pisca de leve para a pessoa achar o artigo.
+  document.querySelectorAll('.faq a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var alvo = document.querySelector(a.getAttribute('href'));
+      if (alvo) { alvo.classList.remove('alvo'); void alvo.offsetWidth; alvo.classList.add('alvo'); }
+    });
+  });
 </script>
 </body>
 </html>

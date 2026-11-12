@@ -4,9 +4,9 @@
 window.LANAP_SELECAO = {
   titulo: 'Processo seletivo de aspirantes 2026.2',
   prazo: 'Inscrições até 30/11/2026, às 23h59',
-  itens: ['Carta de intenção', 'Currículo Lattes'],
+  itens: ['Carta de intenção', 'Currículo Lattes', '2 kg de alimento não perecível (inscrição solidária)'],
   edital: 'edital.html',   // página do edital (resumo + arquivo completo)
-  editalPdf: '',           // PREENCHER: link do edital completo (PDF no site ou link do Google Drive)
+  editalPdf: 'assets/LANAP_Edital_Aspirantes_a_Glia_2026.pdf', // v2, Diogo, 11/11/2026 21:36
   formulario: 'https://docs.google.com/forms/d/e/1FAIpQLScwyPyIY9X1aurfkb37hT3rYy4fkyNbzZoK-0-ZRBzO2aR0QA/viewform', // dono, 11/11/2026
   pagina: 'inscricao.html?etapa=2'
 };
@@ -15,7 +15,7 @@ window.LANAP_SELECAO = {
   var C = window.LANAP_SELECAO;
   // Links relativos à raiz do site, para funcionar também em subpastas (ex.: sinapse/).
   var base = (document.currentScript && document.currentScript.src || '').replace(/assets\/edital\.js.*$/, '');
-  ['edital', 'pagina'].forEach(function (k) { if (C[k] && !/^(https?:)?\/\//.test(C[k])) C[k] = base + C[k]; });
+  ['edital', 'pagina', 'editalPdf'].forEach(function (k) { if (C[k] && !/^(https?:)?\/\//.test(C[k])) C[k] = base + C[k]; });
   var css = '' +
     '.lx-fab{position:fixed;right:22px;bottom:22px;z-index:60;width:64px;height:64px;border-radius:50%;border:0;cursor:pointer;' +
     'background:#0D767D;color:#fff;font:600 11px/1.1 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;' +
@@ -34,7 +34,9 @@ window.LANAP_SELECAO = {
     '.lx-voltar{display:inline-flex;align-items:center;gap:8px;background:#0D767D;color:#fff;border:0;padding:10px 16px;font:600 14px Inter,Arial,sans-serif;cursor:pointer}' +
     '.lx-barra .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.8)}' +
     '.lx-barra a{color:#5CC4C9;font-weight:600;text-decoration:none;white-space:nowrap}' +
-    '.lx-painel iframe{flex:1;width:100%;border:0;background:#FBF9F5}' +
+    '.lx-painel iframe,.lx-corpo{flex:1;width:100%;border:0;background:#FBF9F5}' +
+    '.lx-corpo{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}' +
+    'html.lx-travado,html.lx-travado body{overflow:hidden}' +
     '.lx-rodape{flex:none;display:flex;gap:10px;padding:12px 18px;border-top:1px solid #D9D2C4;background:#fff}' +
     '.lx-rodape a,.lx-rodape button{flex:1;display:flex;justify-content:center;align-items:center;padding:13px;font:600 14px Inter,Arial,sans-serif;text-decoration:none;border:1px solid #0D767D;color:#1F334C;background:#fff;cursor:pointer}' +
     '.lx-rodape .cheio{background:#0D767D;color:#fff}' +
@@ -53,26 +55,50 @@ window.LANAP_SELECAO = {
 
   var naInscricao = /inscricao\.html$/.test(location.pathname) && /etapa=/.test(location.search);
   var painel = document.createElement('div');
-  painel.className = 'lx-painel'; painel.setAttribute('role', 'dialog'); painel.setAttribute('aria-modal', 'true'); painel.setAttribute('aria-label', 'Edital: ' + C.titulo);
+  painel.className = 'lx-painel'; painel.setAttribute('data-lenis-prevent', ''); painel.setAttribute('role', 'dialog'); painel.setAttribute('aria-modal', 'true'); painel.setAttribute('aria-label', 'Edital: ' + C.titulo);
   painel.innerHTML =
     '<div class="lx-barra"><button class="lx-voltar" type="button">← Voltar ao site</button>' +
     '<span class="t">Edital · ' + C.titulo + ' · ' + C.prazo + '</span>' +
     (C.editalPdf ? '<a href="' + C.editalPdf + '" target="_blank" rel="noopener">Arquivo completo ↗</a>' : '') + '</div>' +
-    '<iframe title="Edital do processo seletivo" loading="lazy"></iframe>' +
+    '<div class="lx-corpo" data-lenis-prevent tabindex="0" aria-label="Texto do edital"></div>' +
     '<div class="lx-rodape"><button type="button" data-voltar>Voltar ao site</button>' +
     (naInscricao ? '' : '<a class="cheio" href="' + C.pagina + '">Quero me inscrever</a>') + '</div>';
 
-  var iframe = painel.querySelector('iframe'), ultimoFoco = null;
+  var corpo = painel.querySelector('.lx-corpo'), ultimoFoco = null, carregado = false;
+  function carrega() {
+    if (carregado) return; carregado = true;
+    var url = C.edital;
+    function emIframe() { corpo.outerHTML = '<iframe title="Edital do processo seletivo" src="' + url + '"></iframe>'; }
+    if (!window.fetch || location.protocol === 'file:') return emIframe();
+    fetch(url).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (txt) {
+      var doc = new DOMParser().parseFromString(txt, 'text/html');
+      var css = Array.prototype.map.call(doc.querySelectorAll('style'), function (s) { return s.textContent; }).join('\n')
+        .replace(/:root/g, ':host').replace(/(^|[\s,}])html\b/g, '$1:host').replace(/(^|[\s,}])body\b/g, '$1.raiz');
+      var fontes = Array.prototype.map.call(doc.querySelectorAll('link[rel=stylesheet]'), function (l) { return '<link rel="stylesheet" href="' + l.href + '">'; }).join('');
+      var raiz = corpo.attachShadow ? corpo.attachShadow({ mode: 'open' }) : corpo;
+      var base = url.replace(/[^/]*$/, '');
+      var html = doc.querySelector('main').outerHTML.replace(/(src|href)="(?!https?:|#|mailto:)([^"]+)"/g, function (m, a, v) { return a + '="' + base + v + '"'; });
+      raiz.innerHTML = fontes + '<style>' + css + ':host{display:block}.raiz{font:16px/1.7 Inter,Arial,sans-serif;color:#2F3B48}</style><div class="raiz">' + html + '</div>';
+      // Links internos (perguntas -> artigos) rolam dentro do painel, sem mexer no endereço do site.
+      raiz.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+        var alvo = raiz.querySelector(a.getAttribute('href')); if (!alvo) return;
+        e.preventDefault(); alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        alvo.classList.remove('alvo'); void alvo.offsetWidth; alvo.classList.add('alvo');
+      });
+    }).catch(emIframe);
+  }
   function abre() {
-    ultimoFoco = document.activeElement;
-    if (!iframe.getAttribute('src')) iframe.setAttribute('src', C.edital + (C.editalPdf ? '?pdf=' + encodeURIComponent(C.editalPdf) : ''));
-    painel.classList.add('aberto'); document.body.classList.add('lx-travado'); balao.classList.remove('on');
+    ultimoFoco = document.activeElement; carrega();
+    painel.classList.add('aberto'); document.body.classList.add('lx-travado'); document.documentElement.classList.add('lx-travado'); balao.classList.remove('on');
+    if (window.LANAP_lenis) window.LANAP_lenis.stop();
     if (location.hash !== '#edital') history.pushState({ lxEdital: 1 }, '', '#edital');
     painel.querySelector('.lx-voltar').focus();
   }
   function fecha(viaHistorico) {
     if (!painel.classList.contains('aberto')) return;
-    painel.classList.remove('aberto'); document.body.classList.remove('lx-travado');
+    painel.classList.remove('aberto'); document.body.classList.remove('lx-travado'); document.documentElement.classList.remove('lx-travado');
+    if (window.LANAP_lenis) window.LANAP_lenis.start();
     if (!viaHistorico && location.hash === '#edital') history.back();
     if (ultimoFoco) ultimoFoco.focus();
   }

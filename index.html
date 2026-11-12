@@ -605,6 +605,7 @@
 
   // ---------- Rolagem: inércia leve na roda e no trackpad; no toque, a rolagem nativa ----------
   var lenis = (!reduz && window.Lenis) ? new Lenis({ lerp: .14, wheelMultiplier: 1, smoothWheel: true }) : null;
+  window.LANAP_lenis = lenis;
   var pedido = false;
   function agenda() { yAtual = lenis ? lenis.scroll : scrollY; if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
   function ir(alvo) { if (lenis) lenis.scrollTo(alvo, { duration: 1.4 }); else alvo.scrollIntoView({ behavior: reduz ? 'auto' : 'smooth' }); }
