@@ -271,6 +271,29 @@
     .abertura .rede circle, .abertura:not(.montada) .simbolo { opacity:1; }
     .abertura:not(.montada) .masthead .g > div, .abertura:not(.montada) .conteudo .g, .abertura:not(.montada) .rodape-palco .g > div { opacity:1; transform:none; }
   }
+
+  /* ---------- Modo sólido (rolagem nativa; nada recalculado por quadro) ---------- */
+  @property --enchimento { syntax:'<number>'; inherits:true; initial-value:0; }
+  [data-in] { opacity:0; transform:translate3d(0, 28px, 0); will-change:auto; transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  [data-in="zoom"] { transform:translate3d(0, 22px, 0) scale(.975); }
+  [data-in].visivel { opacity:1; transform:none; }
+  .citacao [data-in="zoom"] { transform:scale(.95); }
+  .citacao [data-in="zoom"].visivel { transform:none; }
+  .intro .frase .w { opacity:.14; transition:opacity .45s ease; }
+  .intro .frase .w.visivel { opacity:1; }
+  .via, .intro .eixo, .programa { transition:--enchimento 1.4s cubic-bezier(.4,0,.2,1); }
+  .via.visivel, .intro .eixo.visivel, .programa.visivel { --enchimento:1; }
+  .intro .eixo.visivel { --enchimento:.72; }
+  .topo.solido { backdrop-filter:none; -webkit-backdrop-filter:none; background:#132235; }
+  .abertura { height:auto; }
+  .abertura .palco { position:relative; height:auto; min-height:100vh; padding:150px 0 110px; }
+  .abertura .simbolo { transform:translate3d(0, -50%, 0); opacity:.14; will-change:auto; }
+  .abertura .rede, .abertura .masthead, .abertura .conteudo, .abertura .rodape-palco { opacity:1; transform:none; }
+  .abertura .conteudo { position:relative; }
+  .faixa { padding:110px 0 120px; }
+  .sumario { padding-top:120px !important; }
+  .faixa .display { grid-column:2 / 12; text-align:center; font-size:clamp(32px, 5vw, 68px); }
+  @media (max-width: 900px) { .faixa .display { grid-column:1 / -1; } .abertura .palco { padding:120px 0 90px; } }
 </style>
 </head>
 <body>
@@ -329,8 +352,10 @@
         <p class="porta-nota" data-nota>Copie o link para entrar no site.</p>
       </div></div>
     </div>
-    <div class="manifesto"><div class="g"><p class="display">Neurociência que se <i>aprende</i>, se <i>pratica</i>, se <i>pesquisa</i> e se <i>compartilha</i>.</p></div></div>
   </div>
+</section>
+<section class="faixa escuro" data-tom="#1F334C">
+  <div class="g"><p class="display" data-in>Neurociência que se <i>aprende</i>, se <i>pratica</i>, se <i>pesquisa</i> e se <i>compartilha</i>.</p></div>
 </section>
 
 <!-- 2. Sumário -->
@@ -457,8 +482,9 @@
 </main>
 
 <script src="assets/edital.js"></script>
-<script src="assets/lenis.min.js"></script>
 <script>
+/* Modo sólido: rolagem nativa do aparelho. Nada é recalculado a cada quadro além da barra de progresso,
+   do topo e dos nós do axônio (só trocas de classe). Os elementos aparecem uma vez, por IntersectionObserver. */
 (function () {
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var topo = document.querySelector('.topo'), progresso = document.querySelector('.progresso');
@@ -466,13 +492,13 @@
   var main = document.querySelector('main'), tonal = document.querySelector('.tonal');
   var C = window.LANAP_SELECAO || {};
 
+  // Frase do Núcleo Científico: palavras acendem em sequência quando a frase entra na tela.
   document.querySelectorAll('[data-palavras]').forEach(function (el) {
-    el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
+    el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w, i) { return '<span class="w" style="transition-delay:' + (i * 45) + 'ms">' + w + '</span>'; }).join(' ');
   });
 
   var secoes = Array.prototype.slice.call(document.querySelectorAll('section[data-tom]'));
   secoes.forEach(function (s) { s.style.setProperty('--bg', s.dataset.tom); });
-
   function montaTonal() {
     var paradas = [];
     secoes.forEach(function (s, i) {
@@ -480,154 +506,108 @@
       var funde = Math.min(s.offsetHeight * .35, innerHeight * .6);
       if (i === 0) { paradas.push(s.dataset.tom + ' 0px', s.dataset.tom + ' ' + Math.round(b) + 'px'); return; }
       var ultimo = i === secoes.length - 1;
-      paradas.push(s.dataset.tom + ' ' + Math.round(a + (i === 1 ? innerHeight * .3 : ultimo ? 0 : funde)) + 'px');
-      paradas.push(s.dataset.tom + ' ' + Math.round(b - (ultimo ? 0 : secoes[i + 1] === secoes[secoes.length - 1] ? funde * 1.4 : funde)) + 'px');
+      paradas.push(s.dataset.tom + ' ' + Math.round(a + (ultimo ? 0 : funde)) + 'px');
+      paradas.push(s.dataset.tom + ' ' + Math.round(b - (ultimo ? 0 : funde)) + 'px');
     });
     tonal.style.height = main.offsetHeight + 'px';
     tonal.style.background = 'linear-gradient(to bottom, ' + paradas.join(', ') + ')';
   }
 
-  // ---------- Axônio: um nó por seção, na proporção real da página ----------
-  var axonio = document.querySelector('.axonio'), fibra = axonio.querySelector('i');
-  var marcos = Array.prototype.slice.call(document.querySelectorAll('section[data-nome]')).map(function (s) {
+  // ---------- Aparecer uma vez ----------
+  function acende(el) { el.classList.add('visivel'); }
+  function acendeVia(via) {
+    via.classList.add('visivel');
+    var passos = via.querySelectorAll('[data-no]'), prog = via.closest('.programa'), cont = prog && prog.querySelector('[data-contador]');
+    passos.forEach(function (p, i) {
+      setTimeout(function () { p.classList.add('on'); if (cont) cont.textContent = (i + 1) + '/' + passos.length; }, reduz ? 0 : 250 + i * 260);
+    });
+    if (prog) prog.classList.add('visivel');
+  }
+  if (reduz || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('[data-in], .w, .frase').forEach(acende);
+    document.querySelectorAll('[data-via]').forEach(acendeVia);
+  } else {
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target; obs.unobserve(el);
+        if (el.hasAttribute('data-via')) acendeVia(el);
+        else if (el.hasAttribute('data-palavras')) { el.classList.add('visivel'); el.querySelectorAll('.w').forEach(acende); }
+        else acende(el);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: .08 });
+    document.querySelectorAll('[data-in], [data-via], [data-palavras]').forEach(function (el) { obs.observe(el); });
+  }
+
+  // ---------- Axônio: um nó por seção ----------
+  var axonio = document.querySelector('.axonio'), fibra = axonio && axonio.querySelector('i');
+  var marcos = axonio ? Array.prototype.slice.call(document.querySelectorAll('section[data-nome]')).map(function (s) {
     var a = document.createElement('a'); a.href = '#' + (s.id || ''); a.innerHTML = '<span>' + s.dataset.nome + '</span>';
     a.setAttribute('aria-label', s.dataset.nome);
     a.addEventListener('click', function (e) { e.preventDefault(); ir(s); });
     axonio.appendChild(a); return { s: s, a: a, topo: 0 };
-  });
-
-  // ---------- Medidas guardadas: durante a rolagem só há contas, nenhuma leitura de layout ----------
-  var entradas = Array.prototype.slice.call(document.querySelectorAll('[data-in]'));
-  var nos = Array.prototype.slice.call(document.querySelectorAll('[data-no]'));
-  var vias = Array.prototype.slice.call(document.querySelectorAll('[data-via]'));
-  var palavras = Array.prototype.slice.call(document.querySelectorAll('.w'));
-  var frase = document.querySelector('[data-palavras]');
-  var programas = Array.prototype.slice.call(document.querySelectorAll('.programa')).map(function (s) {
-    return { el: s, via: s.querySelector('.via'), passos: s.querySelectorAll('.passo'), cont: s.querySelector('[data-contador]') };
-  });
-  var M = {};
-  function absTopo(el) { return el.getBoundingClientRect().top + scrollY; }
+  }) : [];
+  var M = { alto: 1, vh: innerHeight, escuros: [] };
   function medir() {
-    // Mede sem os deslocamentos de entrada: posição de repouso de cada elemento.
-    document.documentElement.classList.add('medindo');
-    M.ent = entradas.map(absTopo);
-    M.nos = nos.map(absTopo);
-    M.vias = vias.map(function (v) { var r = v.getBoundingClientRect(); return { t: r.top + scrollY, h: r.height }; });
-    var rf = frase.getBoundingClientRect(); M.frase = { t: rf.top + scrollY, h: rf.height };
-    M.vh = innerHeight; M.cursoA = abertura.offsetHeight - innerHeight;
-    M.alto = document.documentElement.scrollHeight - innerHeight;
+    M.vh = innerHeight; M.alto = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     M.escuros = secoes.filter(function (s) { return s.classList.contains('escuro'); }).map(function (s) { return [s.offsetTop, s.offsetTop + s.offsetHeight]; });
-    document.documentElement.classList.remove('medindo');
-    marcos.forEach(function (m) { m.topo = m.s.offsetTop; m.a.style.top = (Math.min(1, m.topo / Math.max(1, M.alto)) * 100) + '%'; });
+    marcos.forEach(function (m) { m.topo = m.s.offsetTop; m.a.style.top = (Math.min(1, m.topo / M.alto) * 100) + '%'; });
   }
 
-  function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
-  function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
-  var cache = new WeakMap();
-  function poe(el, nome, v) { var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); } if (m[nome] !== v) { m[nome] = v; el.style.setProperty(nome, v); } }
-  function estilo(el, prop, v) { var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); } if (m[prop] !== v) { m[prop] = v; el.style[prop] = v; } }
-  function marca(el, cls, liga) { if (el.classList.contains(cls) !== liga) el.classList.toggle(cls, liga); }
-
-  var yAtual = scrollY;
+  var ult = {};
+  function poe(el, chave, prop, v) { if (ult[chave] !== v) { ult[chave] = v; el.style[prop] = v; } }
   function quadro() {
-    var y = yAtual, vh = M.vh;
-    var p = y / Math.max(1, M.alto);
-    estilo(progresso, 'transform', 'scaleX(' + p.toFixed(4) + ')');
-    estilo(fibra, 'transform', 'scaleY(' + p.toFixed(4) + ')');
-    marca(topo, 'solido', y > vh * .5);
-    poe(abertura, '--p', lim(y / Math.max(1, M.cursoA)).toFixed(3));
-
-    for (var i = 0; i < entradas.length; i++) {
-      var rel = M.ent[i] - y;
-      if (rel > vh * 1.3 || rel < -vh * 2) continue;
-      poe(entradas[i], '--t', suave((vh * .96 - rel) / (vh * .34)).toFixed(3));
-    }
-    for (var j = 0; j < nos.length; j++) marca(nos[j], 'on', M.nos[j] - y < vh * .6);
-    for (var k = 0; k < vias.length; k++) {
-      var v = M.vias[k], top = v.t - y, eixo = vias[k].classList.contains('eixo');
-      var f = eixo ? lim((vh * .6 - top) / (vh * .3)) * .72 : lim((vh * .6 - top) / Math.max(1, v.h - 20));
-      poe(vias[k], '--enchimento', f.toFixed(3));
-    }
-    var ft = M.frase.t - y;
-    if (ft < vh * 1.2 && ft + M.frase.h > -vh) {
-      var g = lim((vh * .85 - ft) / (vh * .55 + M.frase.h * .5)), n = palavras.length;
-      for (var w = 0; w < n; w++) poe(palavras[w], '--t', suave((g * (n + 4) - w - 1) / 4).toFixed(2));
-    }
-    programas.forEach(function (pr) {
-      var acesos = 0; for (var q = 0; q < pr.passos.length; q++) if (pr.passos[q].classList.contains('on')) acesos++;
-      var txt = acesos + '/' + pr.passos.length; if (pr.cont.textContent !== txt) pr.cont.textContent = txt;
-      poe(pr.el, '--enchimento', pr.via.style.getPropertyValue('--enchimento') || '0');
-    });
-    // Axônio: nós acesos até a seção atual; a atual mostra o nome
-    var meio = y + vh * .45, atual = 0;
-    marcos.forEach(function (m, idx) { var on = m.topo <= meio; marca(m.a, 'on', on); if (on) atual = idx; });
-    marcos.forEach(function (m, idx) { marca(m.a, 'atual', idx === atual); });
+    var y = scrollY, p = Math.min(1, y / M.alto);
+    poe(progresso, 'prog', 'transform', 'scaleX(' + p.toFixed(3) + ')');
+    if (fibra) poe(fibra, 'fibra', 'transform', 'scaleY(' + p.toFixed(3) + ')');
+    var solido = y > M.vh * .5; if (topo.classList.contains('solido') !== solido) topo.classList.toggle('solido', solido);
+    if (!marcos.length) return;
+    var meio = y + M.vh * .45, atual = 0;
+    marcos.forEach(function (m, i) { var on = m.topo <= meio; if (m.a.classList.contains('on') !== on) m.a.classList.toggle('on', on); if (on) atual = i; });
+    marcos.forEach(function (m, i) { var at = i === atual; if (m.a.classList.contains('atual') !== at) m.a.classList.toggle('atual', at); });
     var escuro = M.escuros.some(function (e) { return meio >= e[0] && meio < e[1]; });
-    marca(axonio, 'escuro-fundo', escuro);
+    if (axonio.classList.contains('escuro-fundo') !== escuro) axonio.classList.toggle('escuro-fundo', escuro);
   }
-
+  var pedido = false;
+  function agenda() { if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
   function preparar() { montaTonal(); medir(); quadro(); }
   preparar();
   addEventListener('load', preparar);
   if (document.fonts) document.fonts.ready.then(preparar);
-  var redim; addEventListener('resize', function () { clearTimeout(redim); redim = setTimeout(preparar, 120); });
+  var redim; addEventListener('resize', function () { clearTimeout(redim); redim = setTimeout(preparar, 150); });
+  addEventListener('scroll', agenda, { passive: true });
 
-  // ---------- Abertura que se monta: a rede se desenha e o conteúdo surge ----------
+  function ir(alvo) { alvo.scrollIntoView({ behavior: reduz ? 'auto' : 'smooth', block: 'start' }); }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    if (a.closest('.axonio')) return;
+    a.addEventListener('click', function (e) {
+      var h = a.getAttribute('href'); if (h.length < 2) return;
+      var alvo = document.querySelector(h); if (alvo) { e.preventDefault(); ir(alvo); }
+    });
+  });
+
+  // ---------- Abertura que se monta (uma vez, ao carregar) ----------
   requestAnimationFrame(function () { requestAnimationFrame(function () { abertura.classList.add('montada'); }); });
 
-  // ---------- Porta do processo seletivo (?selecao): a mesma cena de abertura, travada até copiar o link ----------
+  // ---------- Porta do processo seletivo (index.html?selecao), mantida por compatibilidade ----------
   var porta = document.querySelector('.porta-sel');
   var comPorta = /[?&]selecao\b/.test(location.search) || location.hash === '#selecao';
-  if (comPorta && C.formulario) {
+  if (porta && comPorta && C.formulario) {
     document.body.classList.add('travado'); abertura.classList.add('com-porta');
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; scrollTo(0, 0);
     var u = porta.querySelector('[data-u]'), bt = porta.querySelector('[data-copiar]'), nota = porta.querySelector('[data-nota]');
     u.textContent = C.formulario;
     setTimeout(function () { porta.querySelector('.porta-in').classList.add('on'); }, reduz ? 0 : 1500);
     bt.addEventListener('click', function () {
-      function feito() {
-        bt.classList.add('ok'); bt.lastChild.textContent = 'Link copiado';
-        nota.innerHTML = '<b>Link guardado.</b> Antes de colar no navegador, conheça a LANAP.';
-        setTimeout(liberar, 1700);
-      }
+      function feito() { bt.classList.add('ok'); bt.lastChild.textContent = 'Link copiado'; nota.innerHTML = '<b>Link guardado.</b> Antes de colar no navegador, conheça a LANAP.'; setTimeout(liberar, 1700); }
       if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(C.formulario).then(feito, manual); else manual();
       function manual() { var r = document.createRange(); r.selectNodeContents(u); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); } catch (e) {} feito(); }
     });
     function liberar() {
       porta.classList.add('sai'); abertura.classList.add('revela');
-      setTimeout(function () {
-        abertura.classList.remove('com-porta'); document.body.classList.remove('travado');
-        history.replaceState(null, '', location.pathname); preparar();
-        setTimeout(function () { porta.remove(); }, 900);
-      }, 700);
+      setTimeout(function () { abertura.classList.remove('com-porta'); document.body.classList.remove('travado'); history.replaceState(null, '', location.pathname); preparar(); setTimeout(function () { porta.remove(); }, 900); }, 700);
     }
   } else if (porta) { porta.remove(); }
-
-  // ---------- Rolagem: inércia leve na roda e no trackpad; no toque, a rolagem nativa ----------
-  var lenis = (!reduz && window.Lenis) ? new Lenis({ lerp: .14, wheelMultiplier: 1, smoothWheel: true }) : null;
-  window.LANAP_lenis = lenis;
-  var pedido = false;
-  function agenda() { yAtual = lenis ? lenis.scroll : scrollY; if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
-  function ir(alvo) { if (lenis) lenis.scrollTo(alvo, { duration: 1.4 }); else alvo.scrollIntoView({ behavior: reduz ? 'auto' : 'smooth' }); }
-  if (lenis) {
-    (function loop(t) { lenis.raf(t); requestAnimationFrame(loop); })(performance.now());
-    lenis.on('scroll', agenda);
-  }
-  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-    if (a.closest('.axonio')) return;
-    a.addEventListener('click', function (e) {
-      var h = a.getAttribute('href'); if (h.length < 2) return;
-      var alvo = document.querySelector(h);
-      if (alvo) { e.preventDefault(); ir(alvo); }
-    });
-  });
-  addEventListener('scroll', agenda, { passive: true });
-
-  if (reduz) {
-    entradas.concat(nos, palavras).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
-    vias.forEach(function (v) { v.style.setProperty('--enchimento', 1); });
-    programas.forEach(function (pr) { pr.el.style.setProperty('--enchimento', 1); pr.cont.textContent = pr.passos.length + '/' + pr.passos.length; });
-  }
 })();
 </script>
 
