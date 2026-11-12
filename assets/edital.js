@@ -5,8 +5,8 @@ window.LANAP_SELECAO = {
   titulo: 'Processo seletivo de aspirantes 2026.2',
   prazo: 'Inscrições até 30/11/2026, às 23h59',
   itens: ['Carta de intenção', 'Currículo Lattes'],
-  edital: 'edital.html',   // página do edital (HTML, lê bem no celular)
-  editalPdf: '',           // PREENCHER: PDF para baixar, quando existir
+  edital: 'edital.html',   // página do edital (resumo + arquivo completo)
+  editalPdf: '',           // PREENCHER: link do edital completo (PDF no site ou link do Google Drive)
   formulario: 'https://docs.google.com/forms/d/e/1FAIpQLScwyPyIY9X1aurfkb37hT3rYy4fkyNbzZoK-0-ZRBzO2aR0QA/viewform', // dono, 11/11/2026
   pagina: 'inscricao.html?etapa=2'
 };
@@ -57,7 +57,7 @@ window.LANAP_SELECAO = {
   painel.innerHTML =
     '<div class="lx-barra"><button class="lx-voltar" type="button">← Voltar ao site</button>' +
     '<span class="t">Edital · ' + C.titulo + ' · ' + C.prazo + '</span>' +
-    (C.editalPdf ? '<a href="' + C.editalPdf + '" download>Baixar PDF</a>' : '') + '</div>' +
+    (C.editalPdf ? '<a href="' + C.editalPdf + '" target="_blank" rel="noopener">Arquivo completo ↗</a>' : '') + '</div>' +
     '<iframe title="Edital do processo seletivo" loading="lazy"></iframe>' +
     '<div class="lx-rodape"><button type="button" data-voltar>Voltar ao site</button>' +
     (naInscricao ? '' : '<a class="cheio" href="' + C.pagina + '">Quero me inscrever</a>') + '</div>';
@@ -65,7 +65,7 @@ window.LANAP_SELECAO = {
   var iframe = painel.querySelector('iframe'), ultimoFoco = null;
   function abre() {
     ultimoFoco = document.activeElement;
-    if (!iframe.getAttribute('src')) iframe.setAttribute('src', C.edital);
+    if (!iframe.getAttribute('src')) iframe.setAttribute('src', C.edital + (C.editalPdf ? '?pdf=' + encodeURIComponent(C.editalPdf) : ''));
     painel.classList.add('aberto'); document.body.classList.add('lx-travado'); balao.classList.remove('on');
     if (location.hash !== '#edital') history.pushState({ lxEdital: 1 }, '', '#edital');
     painel.querySelector('.lx-voltar').focus();

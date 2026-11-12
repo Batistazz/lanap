@@ -27,6 +27,12 @@
   li + li { margin-top:6px; }
   .pdf { margin-top:28px; padding:16px 18px; border-left:3px solid var(--teal); background:#EAF4F3; font-size:15px; }
   .pdf a { color:var(--navy); font-weight:600; }
+  .completo { margin-top:44px; padding-top:18px; border-top:1px solid var(--navy); }
+  .completo .acoes { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 16px; }
+  .completo .acoes a { flex:1 1 200px; text-align:center; padding:13px 16px; border:1px solid var(--teal); color:var(--navy); text-decoration:none; font-weight:600; font-size:14px; }
+  .completo .acoes a.cheio { background:var(--teal); color:#fff; }
+  .visor { width:100%; height:min(80vh, 900px); border:1px solid var(--linha); background:#fff; }
+  .sem-arquivo { padding:28px 20px; border:1px dashed var(--linha); text-align:center; color:var(--cinza); font-size:15px; }
   footer { margin-top:56px; padding-top:18px; border-top:1px solid var(--linha); font-size:13px; color:var(--cinza); }
   @media (max-width:560px) { .resumo div { grid-template-columns:1fr; gap:2px; } }
 </style>
@@ -71,13 +77,28 @@
     <li>Preencha os dados, anexe os dois PDFs, marque as declarações e envie.</li>
   </ol>
 
+  <section class="completo" id="completo">
+    <span class="rotulo">Documento oficial</span>
+    <h2 style="border:0;margin-top:6px;padding-top:0"><span>05</span>Edital completo</h2>
+    <div data-visor><div class="sem-arquivo">O arquivo completo do edital, com os Anexos I e II, será exibido aqui.</div></div>
+  </section>
+
   <footer>Resumo elaborado a partir do formulário oficial de inscrição. Em caso de divergência, vale o edital completo. LANAP · Liga Acadêmica de Neurociência Aplicada · Curso de Medicina · UniBH Vespasiano · fasehlanap@gmail.com</footer>
 </main>
 <script>
-  try {
-    var pdf = (parent && parent.LANAP_SELECAO && parent.LANAP_SELECAO.editalPdf) || '';
-    if (pdf) document.querySelector('[data-pdf-link]').innerHTML = '<a href="' + pdf + '" target="_blank" rel="noopener">Abrir o edital completo (PDF)</a>';
-  } catch (e) {}
+  // O link do edital completo chega por ?pdf= (enviado pela bolinha, assets/edital.js).
+  (function () {
+    var pdf = new URLSearchParams(location.search).get('pdf') || '';
+    if (!pdf) return;
+    var drive = pdf.match(/drive\.google\.com\/file\/d\/([^/?#]+)/);
+    var ver = drive ? 'https://drive.google.com/file/d/' + drive[1] + '/preview' : pdf;
+    var baixar = drive ? 'https://drive.google.com/uc?export=download&id=' + drive[1] : pdf;
+    document.querySelector('[data-pdf-link]').innerHTML = '<a href="#completo">Ver o edital completo abaixo ↓</a>';
+    document.querySelector('[data-visor]').innerHTML =
+      '<div class="acoes"><a class="cheio" href="' + ver + '" target="_blank" rel="noopener">Abrir em tela cheia</a>' +
+      '<a href="' + baixar + '" target="_blank" rel="noopener"' + (drive ? '' : ' download') + '>Baixar o PDF</a></div>' +
+      '<iframe class="visor" src="' + ver + '" title="Edital completo do processo seletivo 2026.2" loading="lazy"></iframe>';
+  })();
 </script>
 </body>
 </html>

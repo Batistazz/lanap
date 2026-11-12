@@ -11,6 +11,11 @@
 <meta property="og:description" content="Conheça a liga, leia o edital e faça sua inscrição até 30/11.">
 <meta property="og:image" content="https://batistazz.github.io/lanap/assets/logo-navy.png">
 <link rel="icon" href="assets/lanap-symbol-teal.svg" type="image/svg+xml">
+<script>
+  // O link enviado aos grupos abre a própria cena de abertura do site, travada até copiar o link do formulário.
+  // As etapas desta página (?etapa=2|3) continuam servindo ao botão "Quero me inscrever".
+  if (!/[?&]etapa=/.test(location.search)) location.replace('index.html?selecao');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
 <style>
   :root { --navy:#1F334C; --navy-3:#132235; --teal:#0D767D; --tc:#5CC4C9; --papel:#FBF9F5; --linha:#D9D2C4; --texto:#2F3B48; --cinza:#6B7684;
@@ -154,7 +159,7 @@
     <p class="chapeu">A Liga Acadêmica de Neurociência Aplicada é a liga de neurociência do curso de Medicina da UniBH Vespasiano: formação, prática, pesquisa e comunidade.</p>
 
     <ol class="nucleos">
-      <li><span class="n">01</span><div><h3>Programa Formativo</h3><p>Aulas e discussões sobre as bases da neurociência, com docentes da instituição.</p></div></li>
+      <li><span class="n">01</span><div><h3>Programa Formativo</h3><p>Aulas e discussões sobre as bases da neurociência, com docentes da instituição e de instituições parceiras.</p></div></li>
       <li><span class="n">02</span><div><h3>Programa Imersivo</h3><p>Preparação para a prática, como a paramentação cirúrgica, rumo a vivências supervisionadas.</p></div></li>
       <li><span class="n">03</span><div><h3>Produção Científica</h3><p>Grupos que partem de uma pergunta, leem criticamente as evidências e produzem trabalhos com orientação docente.</p></div></li>
       <li><span class="n">04</span><div><h3>Núcleo Cultural</h3><p>A ciência da liga em diálogo com a comunidade.</p></div></li>

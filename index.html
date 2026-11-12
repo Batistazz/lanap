@@ -204,10 +204,78 @@
     .abertura .manifesto, .abertura .simbolo { display:none; }
     .abertura .conteudo, .abertura .masthead { opacity:1; transform:none; }
   }
+
+  /* ---------- Construção da abertura (todas as visitas) ---------- */
+  .abertura .rede path { stroke-dasharray:1400; stroke-dashoffset:1400; transition:stroke-dashoffset 2.4s cubic-bezier(.6,0,.2,1); }
+  .abertura .rede circle { opacity:0; transition:opacity .6s; }
+  .abertura.montada .rede path { stroke-dashoffset:0; }
+  .abertura.montada .rede circle { opacity:1; }
+  .abertura .rede g:nth-child(2) circle:nth-child(3n+2) { transition-delay:.5s; }
+  .abertura .rede g:nth-child(2) circle:nth-child(3n) { transition-delay:1s; }
+  .abertura .masthead .g > div, .abertura .conteudo .g, .abertura .rodape-palco .g > div { transition:opacity .9s ease, transform .9s ease; }
+  .abertura:not(.montada) .masthead .g > div { opacity:0; transform:translateY(-10px); }
+  .abertura:not(.montada) .conteudo .g { opacity:0; transform:translateY(24px); }
+  .abertura:not(.montada) .rodape-palco .g > div { opacity:0; }
+  .abertura .simbolo { transition:opacity 1.6s; }
+  .abertura:not(.montada) .simbolo { opacity:0; }
+
+  /* ---------- Porta do processo seletivo (index.html?selecao) ---------- */
+  html.medindo [data-in] { transform:none !important; transition:none !important; }
+  body.travado { overflow:hidden; }
+  .porta-sel { position:absolute; inset:0; display:none; align-items:center; z-index:3; }
+  .com-porta .porta-sel { display:flex; }
+  .com-porta .conteudo, .com-porta .rodape-palco, .com-porta .manifesto { opacity:0 !important; pointer-events:none; }
+  .abertura.revela .conteudo { transition:opacity 1.1s ease .2s; }
+  .porta-in { grid-column:1 / 11; opacity:0; transform:translateY(22px); transition:opacity .9s ease, transform .9s ease; }
+  .porta-in.on { opacity:1; transform:none; }
+  .porta-sel.sai .porta-in { opacity:0; transform:translateY(-36px); transition-duration:.8s; }
+  .porta-in .display { font-size:clamp(44px, 7vw, 100px); margin-top:20px; }
+  .porta-in .chapeu { max-width:620px; margin-top:24px; color:rgba(255,255,255,.82); }
+  .porta-link { margin-top:34px; max-width:640px; border-top:1px solid rgba(255,255,255,.5); border-bottom:var(--fio); display:grid; grid-template-columns:1fr auto; align-items:center; gap:18px; padding:16px 0; }
+  .porta-link .u { font:14px/1.45 ui-monospace, Consolas, monospace; color:rgba(255,255,255,.88); word-break:break-all; user-select:all; }
+  .porta-link button { display:inline-flex; align-items:center; gap:12px; padding:15px 22px; border:1px solid var(--teal-claro); background:transparent; color:#fff; font:500 14px var(--sans); letter-spacing:.02em; cursor:pointer; white-space:nowrap; transition:background .3s, color .3s; }
+  .porta-link button:hover, .porta-link button.ok { background:var(--teal-claro); color:var(--navy-3); }
+  .porta-link button .no { width:9px; height:9px; background:transparent; }
+  .porta-link button.ok .no { background:var(--navy-3); border-color:var(--navy-3); }
+  .porta-nota { margin-top:14px; font-size:13px; color:rgba(255,255,255,.6); }
+  .porta-nota b { color:#fff; font-weight:500; }
+
+  /* ---------- Axônio: a construção temporal do site ---------- */
+  .axonio { position:fixed; left:clamp(10px, 1.6vw, 26px); top:50%; height:min(62vh, 560px); width:22px; transform:translateY(-50%); z-index:15; transition:opacity .6s; }
+  .axonio::before, .axonio i { content:""; position:absolute; left:10px; top:0; width:1px; height:100%; }
+  .axonio::before { background:rgba(127,140,155,.35); }
+  .axonio i { background:var(--teal-claro); transform-origin:top; transform:scaleY(0); }
+  .axonio a { position:absolute; left:5px; width:11px; height:11px; margin-top:-5px; border-radius:50%; border:1.5px solid rgba(127,140,155,.7); background:var(--papel); transition:background .4s, border-color .4s, transform .4s; }
+  .axonio a.on { background:var(--teal); border-color:var(--teal); }
+  .axonio a.atual { transform:scale(1.35); }
+  .axonio a span { position:absolute; left:20px; top:50%; transform:translateY(-50%); white-space:nowrap; font:600 10.5px var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--cinza); opacity:0; transition:opacity .3s; pointer-events:none; }
+  .axonio a.atual span, .axonio a:hover span, .axonio a:focus-visible span { opacity:1; }
+  .axonio.escuro-fundo a span { color:rgba(255,255,255,.7); }
+  .axonio.escuro-fundo a { background:var(--navy); }
+  .axonio.escuro-fundo a.on { background:var(--teal-claro); border-color:var(--teal-claro); }
+  body.travado .axonio { opacity:0; pointer-events:none; }
+  .progresso { width:100% !important; transform-origin:left; transform:scaleX(0); }
+  @media (max-width: 1600px) {
+    .axonio a.atual span { opacity:0; }
+    .axonio a:hover span, .axonio a:focus-visible span { opacity:1; background:var(--papel); color:var(--navy); padding:4px 8px; box-shadow:0 4px 14px rgba(19,34,53,.15); }
+    .axonio.escuro-fundo a:hover span { background:var(--navy-3); color:#fff; }
+  }
+  @media (max-width: 1100px) { .axonio { display:none; } }
+  @media (max-width: 900px) {
+    .porta-in { grid-column:1 / -1; }
+    .porta-link { grid-template-columns:1fr; }
+    .porta-link button { justify-content:center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .abertura .rede path { stroke-dashoffset:0; transition:none; }
+    .abertura .rede circle, .abertura:not(.montada) .simbolo { opacity:1; }
+    .abertura:not(.montada) .masthead .g > div, .abertura:not(.montada) .conteudo .g, .abertura:not(.montada) .rodape-palco .g > div { opacity:1; transform:none; }
+  }
 </style>
 </head>
 <body>
 <div class="progresso"></div>
+<nav class="axonio" aria-label="Percurso da página"><i></i></nav>
 
 <header class="topo">
   <div class="g">
@@ -227,7 +295,7 @@
 <div class="tonal" aria-hidden="true"></div>
 
 <!-- 1. Abertura -->
-<section class="abertura escuro" data-tom="#1F334C" id="inicio">
+<section class="abertura escuro" data-tom="#1F334C" id="inicio" data-nome="Abertura">
   <div class="palco">
     <svg class="rede" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g stroke="rgba(92,196,201,.22)" stroke-width="1" fill="none">
@@ -252,12 +320,21 @@
       </div>
     </div>
     <div class="rodape-palco"><div class="g"><div><span class="rotulo">Role para conhecer</span><span class="no"></span></div></div></div>
+    <div class="porta-sel" aria-live="polite">
+      <div class="g"><div class="porta-in">
+        <span class="rotulo ac">Processo seletivo · Aspirantes 2026.2</span>
+        <p class="display">Faça parte da <i>LANAP.</i></p>
+        <p class="chapeu">Inscrições até 30/11/2026, às 23h59. Copie o link do formulário: você vai colá-lo no navegador depois de conhecer a liga.</p>
+        <div class="porta-link"><span class="u" data-u></span><button type="button" data-copiar><span class="no"></span>Copiar link de inscrição</button></div>
+        <p class="porta-nota" data-nota>Copie o link para entrar no site.</p>
+      </div></div>
+    </div>
     <div class="manifesto"><div class="g"><p class="display">Neurociência que se <i>aprende</i>, se <i>pratica</i>, se <i>pesquisa</i> e se <i>compartilha</i>.</p></div></div>
   </div>
 </section>
 
 <!-- 2. Sumário -->
-<section class="sumario" data-tom="#FBF9F5">
+<section class="sumario" data-tom="#FBF9F5" data-nome="Sumário">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo">Sumário</span><span class="sep"></span><span class="rotulo">Quatro eixos</span></div>
     <ol>
@@ -270,7 +347,7 @@
 </section>
 
 <!-- 3. Núcleo Científico -->
-<section class="intro" data-tom="#F6F2EA" id="cientifico">
+<section class="intro" data-tom="#F6F2EA" id="cientifico" data-nome="Núcleo Científico">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Núcleo Científico</span><span class="sep"></span><span class="rotulo">Programas 01–03</span></div>
     <p class="frase" data-palavras>O Núcleo Científico aprofunda o estudo das neurociências e aproxima os estudantes da realidade clínica e cirúrgica, em um percurso contínuo.</p>
@@ -283,7 +360,7 @@
 </section>
 
 <!-- 4a. Formativo -->
-<section class="programa" data-tom="#EBF3F1" id="formativo">
+<section class="programa" data-tom="#EBF3F1" id="formativo" data-nome="01 Formativo">
   <div class="g">
     <div class="cab" data-in><span class="num">01</span><span class="rotulo ac">Formação</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -294,14 +371,14 @@
     <ol class="via" data-via>
       <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.1</span><h3>Bases da neurociência</h3></div><p>Os temas partem dos fundamentos: neuroanatomia, semiologia neurológica e neurociência aplicada.</p></li>
       <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.2</span><h3>Aula planejada pela liga</h3></div><p>A liga define a estrutura e o plano de conteúdo de cada aula antes do encontro.</p></li>
-      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.3</span><h3>Docentes da instituição</h3></div><p>As aulas são ministradas por professores convidados da UniBH Vespasiano.</p></li>
+      <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.3</span><h3>Docentes da instituição e de instituições parceiras</h3></div><p>As aulas são ministradas por professores convidados da UniBH Vespasiano e de instituições parceiras.</p></li>
       <li class="passo" data-in data-no><span class="no"></span><div class="cabeca-passo"><span class="num">1.4</span><h3>Discussão e material de apoio</h3></div><p>Cada encontro combina exposição e discussão, com material como slides e apostila para revisar depois.</p></li>
     </ol>
   </div>
 </section>
 
 <!-- 4b. Imersivo -->
-<section class="programa" data-tom="#E6EDF2" id="imersivo">
+<section class="programa" data-tom="#E6EDF2" id="imersivo" data-nome="02 Imersivo">
   <div class="g">
     <div class="cab" data-in><span class="num">02</span><span class="rotulo ac">Prática</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -319,7 +396,7 @@
 </section>
 
 <!-- 4c. Produção Científica -->
-<section class="programa" data-tom="#F4EEE3" id="producao">
+<section class="programa" data-tom="#F4EEE3" id="producao" data-nome="03 Produção">
   <div class="g">
     <div class="cab" data-in><span class="num">03</span><span class="rotulo ac">Pesquisa</span><span class="sep"></span><span class="rotulo">Núcleo Científico</span></div>
     <div class="lado" data-in="zoom">
@@ -337,7 +414,7 @@
 </section>
 
 <!-- 5. Núcleo Cultural -->
-<section class="cultural" data-tom="#EEF4F1" id="cultural">
+<section class="cultural" data-tom="#EEF4F1" id="cultural" data-nome="04 Cultural">
   <div class="g">
     <div class="cab" data-in><span class="num">04</span><span class="rotulo ac">Comunidade</span><span class="sep"></span><span class="rotulo">Instituído em setembro de 2026</span></div>
     <div class="lado" data-in="zoom">
@@ -360,7 +437,7 @@
 </section>
 
 <!-- 6. Convite -->
-<section class="convite escuro" data-tom="#1F334C" id="convite">
+<section class="convite escuro" data-tom="#1F334C" id="convite" data-nome="Convite">
   <div class="g">
     <div class="cab" data-in><span class="no cheio"></span><span class="rotulo ac">Um convite</span><span class="sep"></span><span class="rotulo">Parcerias</span></div>
     <h2 class="titulo" data-in="zoom">Formar estudantes com <i>rigor científico</i> e sensibilidade para o cuidado.</h2>
@@ -384,19 +461,18 @@
 <script>
 (function () {
   var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var raiz = document.documentElement, topo = document.querySelector('.topo');
+  var topo = document.querySelector('.topo'), progresso = document.querySelector('.progresso');
   var abertura = document.querySelector('.abertura');
   var main = document.querySelector('main'), tonal = document.querySelector('.tonal');
+  var C = window.LANAP_SELECAO || {};
 
   document.querySelectorAll('[data-palavras]').forEach(function (el) {
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   });
 
-  // Cada seção usa o próprio tom como --bg (os nós vazados ficam da cor do fundo).
   var secoes = Array.prototype.slice.call(document.querySelectorAll('section[data-tom]'));
   secoes.forEach(function (s) { s.style.setProperty('--bg', s.dataset.tom); });
 
-  // Degradê da página: cada tom domina o miolo da sua seção e se funde ao próximo na fronteira.
   function montaTonal() {
     var paradas = [];
     secoes.forEach(function (s, i) {
@@ -410,10 +486,17 @@
     tonal.style.height = main.offsetHeight + 'px';
     tonal.style.background = 'linear-gradient(to bottom, ' + paradas.join(', ') + ')';
   }
-  montaTonal();
-  addEventListener('load', montaTonal);
-  if (document.fonts) document.fonts.ready.then(montaTonal);
 
+  // ---------- Axônio: um nó por seção, na proporção real da página ----------
+  var axonio = document.querySelector('.axonio'), fibra = axonio.querySelector('i');
+  var marcos = Array.prototype.slice.call(document.querySelectorAll('section[data-nome]')).map(function (s) {
+    var a = document.createElement('a'); a.href = '#' + (s.id || ''); a.innerHTML = '<span>' + s.dataset.nome + '</span>';
+    a.setAttribute('aria-label', s.dataset.nome);
+    a.addEventListener('click', function (e) { e.preventDefault(); ir(s); });
+    axonio.appendChild(a); return { s: s, a: a, topo: 0 };
+  });
+
+  // ---------- Medidas guardadas: durante a rolagem só há contas, nenhuma leitura de layout ----------
   var entradas = Array.prototype.slice.call(document.querySelectorAll('[data-in]'));
   var nos = Array.prototype.slice.call(document.querySelectorAll('[data-no]'));
   var vias = Array.prototype.slice.call(document.querySelectorAll('[data-via]'));
@@ -422,75 +505,130 @@
   var programas = Array.prototype.slice.call(document.querySelectorAll('.programa')).map(function (s) {
     return { el: s, via: s.querySelector('.via'), passos: s.querySelectorAll('.passo'), cont: s.querySelector('[data-contador]') };
   });
-
-  if (reduz) {
-    entradas.concat(nos, palavras).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
-    vias.forEach(function (v) { v.style.setProperty('--enchimento', 1); });
-    programas.forEach(function (p) { p.el.style.setProperty('--enchimento', 1); p.cont.textContent = '4/4'; });
-    return;
+  var M = {};
+  function absTopo(el) { return el.getBoundingClientRect().top + scrollY; }
+  function medir() {
+    // Mede sem os deslocamentos de entrada: posição de repouso de cada elemento.
+    document.documentElement.classList.add('medindo');
+    M.ent = entradas.map(absTopo);
+    M.nos = nos.map(absTopo);
+    M.vias = vias.map(function (v) { var r = v.getBoundingClientRect(); return { t: r.top + scrollY, h: r.height }; });
+    var rf = frase.getBoundingClientRect(); M.frase = { t: rf.top + scrollY, h: rf.height };
+    M.vh = innerHeight; M.cursoA = abertura.offsetHeight - innerHeight;
+    M.alto = document.documentElement.scrollHeight - innerHeight;
+    M.escuros = secoes.filter(function (s) { return s.classList.contains('escuro'); }).map(function (s) { return [s.offsetTop, s.offsetTop + s.offsetHeight]; });
+    document.documentElement.classList.remove('medindo');
+    marcos.forEach(function (m) { m.topo = m.s.offsetTop; m.a.style.top = (Math.min(1, m.topo / Math.max(1, M.alto)) * 100) + '%'; });
   }
 
   function lim(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function suave(x) { x = lim(x); return x * x * (3 - 2 * x); }
-  // Só escreve quando o valor muda: evita recálculo de estilo à toa.
   var cache = new WeakMap();
-  function poe(el, nome, v) {
-    var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); }
-    if (m[nome] !== v) { m[nome] = v; el.style.setProperty(nome, v); }
-  }
-  function marca(el, liga) { if (el.classList.contains('on') !== liga) el.classList.toggle('on', liga); }
+  function poe(el, nome, v) { var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); } if (m[nome] !== v) { m[nome] = v; el.style.setProperty(nome, v); } }
+  function estilo(el, prop, v) { var m = cache.get(el); if (!m) { m = {}; cache.set(el, m); } if (m[prop] !== v) { m[prop] = v; el.style[prop] = v; } }
+  function marca(el, cls, liga) { if (el.classList.contains(cls) !== liga) el.classList.toggle(cls, liga); }
 
+  var yAtual = scrollY;
   function quadro() {
-    var vh = innerHeight, y = scrollY;
-    // 1) Leitura: todas as posições de uma vez, antes de qualquer escrita
-    var topos = entradas.map(function (el) { return el.getBoundingClientRect().top; });
-    var toposNo = nos.map(function (el) { return el.getBoundingClientRect().top; });
-    var rv = vias.map(function (v) { return v.getBoundingClientRect(); });
-    var rf = frase.getBoundingClientRect();
-    var cursoA = abertura.offsetHeight - vh, alto = raiz.scrollHeight - vh;
+    var y = yAtual, vh = M.vh;
+    var p = y / Math.max(1, M.alto);
+    estilo(progresso, 'transform', 'scaleX(' + p.toFixed(4) + ')');
+    estilo(fibra, 'transform', 'scaleY(' + p.toFixed(4) + ')');
+    marca(topo, 'solido', y > vh * .5);
+    poe(abertura, '--p', lim(y / Math.max(1, M.cursoA)).toFixed(3));
 
-    // 2) Escrita
-    poe(raiz, '--rolagem', (y / Math.max(1, alto)).toFixed(3));
-    if (topo.classList.contains('solido') !== (y > vh * .5)) topo.classList.toggle('solido');
-    poe(abertura, '--p', lim(y / Math.max(1, cursoA)).toFixed(3));
     for (var i = 0; i < entradas.length; i++) {
-      if (topos[i] > vh * 1.2 || topos[i] < -vh * 2) continue;
-      poe(entradas[i], '--t', suave((vh * .96 - topos[i]) / (vh * .34)).toFixed(2));
+      var rel = M.ent[i] - y;
+      if (rel > vh * 1.3 || rel < -vh * 2) continue;
+      poe(entradas[i], '--t', suave((vh * .96 - rel) / (vh * .34)).toFixed(3));
     }
-    for (var j = 0; j < nos.length; j++) marca(nos[j], toposNo[j] < vh * .6);
+    for (var j = 0; j < nos.length; j++) marca(nos[j], 'on', M.nos[j] - y < vh * .6);
     for (var k = 0; k < vias.length; k++) {
-      var r = rv[k], eixo = vias[k].classList.contains('eixo');
-      var f = eixo ? lim((vh * .6 - r.top) / (vh * .3)) * .72 : lim((vh * .6 - r.top) / Math.max(1, r.height - 20));
+      var v = M.vias[k], top = v.t - y, eixo = vias[k].classList.contains('eixo');
+      var f = eixo ? lim((vh * .6 - top) / (vh * .3)) * .72 : lim((vh * .6 - top) / Math.max(1, v.h - 20));
       poe(vias[k], '--enchimento', f.toFixed(3));
     }
-    if (rf.top < vh * 1.2 && rf.bottom > -vh) {
-      var g = lim((vh * .85 - rf.top) / (vh * .55 + rf.height * .5)), n = palavras.length;
+    var ft = M.frase.t - y;
+    if (ft < vh * 1.2 && ft + M.frase.h > -vh) {
+      var g = lim((vh * .85 - ft) / (vh * .55 + M.frase.h * .5)), n = palavras.length;
       for (var w = 0; w < n; w++) poe(palavras[w], '--t', suave((g * (n + 4) - w - 1) / 4).toFixed(2));
     }
-    programas.forEach(function (p) {
-      var acesos = 0; for (var q = 0; q < p.passos.length; q++) if (p.passos[q].classList.contains('on')) acesos++;
-      var txt = acesos + '/' + p.passos.length; if (p.cont.textContent !== txt) p.cont.textContent = txt;
-      poe(p.el, '--enchimento', p.via.style.getPropertyValue('--enchimento') || '0');
+    programas.forEach(function (pr) {
+      var acesos = 0; for (var q = 0; q < pr.passos.length; q++) if (pr.passos[q].classList.contains('on')) acesos++;
+      var txt = acesos + '/' + pr.passos.length; if (pr.cont.textContent !== txt) pr.cont.textContent = txt;
+      poe(pr.el, '--enchimento', pr.via.style.getPropertyValue('--enchimento') || '0');
     });
+    // Axônio: nós acesos até a seção atual; a atual mostra o nome
+    var meio = y + vh * .45, atual = 0;
+    marcos.forEach(function (m, idx) { var on = m.topo <= meio; marca(m.a, 'on', on); if (on) atual = idx; });
+    marcos.forEach(function (m, idx) { marca(m.a, 'atual', idx === atual); });
+    var escuro = M.escuros.some(function (e) { return meio >= e[0] && meio < e[1]; });
+    marca(axonio, 'escuro-fundo', escuro);
   }
 
-  // Rolagem: inércia leve na roda e no trackpad; no toque fica a rolagem nativa do aparelho.
-  var lenis = window.Lenis ? new Lenis({ lerp: .14, wheelMultiplier: 1, smoothWheel: true }) : null;
+  function preparar() { montaTonal(); medir(); quadro(); }
+  preparar();
+  addEventListener('load', preparar);
+  if (document.fonts) document.fonts.ready.then(preparar);
+  var redim; addEventListener('resize', function () { clearTimeout(redim); redim = setTimeout(preparar, 120); });
+
+  // ---------- Abertura que se monta: a rede se desenha e o conteúdo surge ----------
+  requestAnimationFrame(function () { requestAnimationFrame(function () { abertura.classList.add('montada'); }); });
+
+  // ---------- Porta do processo seletivo (?selecao): a mesma cena de abertura, travada até copiar o link ----------
+  var porta = document.querySelector('.porta-sel');
+  var comPorta = /[?&]selecao\b/.test(location.search) || location.hash === '#selecao';
+  if (comPorta && C.formulario) {
+    document.body.classList.add('travado'); abertura.classList.add('com-porta');
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; scrollTo(0, 0);
+    var u = porta.querySelector('[data-u]'), bt = porta.querySelector('[data-copiar]'), nota = porta.querySelector('[data-nota]');
+    u.textContent = C.formulario;
+    setTimeout(function () { porta.querySelector('.porta-in').classList.add('on'); }, reduz ? 0 : 1500);
+    bt.addEventListener('click', function () {
+      function feito() {
+        bt.classList.add('ok'); bt.lastChild.textContent = 'Link copiado';
+        nota.innerHTML = '<b>Link guardado.</b> Antes de colar no navegador, conheça a LANAP.';
+        setTimeout(liberar, 1700);
+      }
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(C.formulario).then(feito, manual); else manual();
+      function manual() { var r = document.createRange(); r.selectNodeContents(u); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); } catch (e) {} feito(); }
+    });
+    function liberar() {
+      porta.classList.add('sai'); abertura.classList.add('revela');
+      setTimeout(function () {
+        abertura.classList.remove('com-porta'); document.body.classList.remove('travado');
+        history.replaceState(null, '', location.pathname); preparar();
+        setTimeout(function () { porta.remove(); }, 900);
+      }, 700);
+    }
+  } else if (porta) { porta.remove(); }
+
+  // ---------- Rolagem: inércia leve na roda e no trackpad; no toque, a rolagem nativa ----------
+  var lenis = (!reduz && window.Lenis) ? new Lenis({ lerp: .14, wheelMultiplier: 1, smoothWheel: true }) : null;
   var pedido = false;
-  function agenda() { if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
+  function agenda() { yAtual = lenis ? lenis.scroll : scrollY; if (!pedido) { pedido = true; requestAnimationFrame(function () { pedido = false; quadro(); }); } }
+  function ir(alvo) { if (lenis) lenis.scrollTo(alvo, { duration: 1.4 }); else alvo.scrollIntoView({ behavior: reduz ? 'auto' : 'smooth' }); }
   if (lenis) {
     (function loop(t) { lenis.raf(t); requestAnimationFrame(loop); })(performance.now());
-    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        var alvo = document.querySelector(a.getAttribute('href'));
-        if (alvo) { e.preventDefault(); lenis.scrollTo(alvo, { duration: 1.4 }); }
-      });
-    });
+    lenis.on('scroll', agenda);
   }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    if (a.closest('.axonio')) return;
+    a.addEventListener('click', function (e) {
+      var h = a.getAttribute('href'); if (h.length < 2) return;
+      var alvo = document.querySelector(h);
+      if (alvo) { e.preventDefault(); ir(alvo); }
+    });
+  });
   addEventListener('scroll', agenda, { passive: true });
-  addEventListener('resize', function () { montaTonal(); agenda(); });
-  quadro();
+
+  if (reduz) {
+    entradas.concat(nos, palavras).forEach(function (el) { el.style.setProperty('--t', 1); el.classList.add('on'); });
+    vias.forEach(function (v) { v.style.setProperty('--enchimento', 1); });
+    programas.forEach(function (pr) { pr.el.style.setProperty('--enchimento', 1); pr.cont.textContent = pr.passos.length + '/' + pr.passos.length; });
+  }
 })();
 </script>
+
 </body>
 </html>
