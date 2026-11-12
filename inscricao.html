@@ -1,0 +1,292 @@
+<!doctype html>
+<!-- Página do link enviado aos grupos: carregamento → conheça a LANAP → leia o edital → copie o link de inscrição.
+     O link do formulário e do edital vêm de assets/edital.js (LANAP_SELECAO). Prévia de etapas: inscricao.html?etapa=1|2|3 -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inscrição · Processo seletivo 2026.2 · LANAP</title>
+<meta name="description" content="Processo seletivo 2026.2 da LANAP, Liga Acadêmica de Neurociência Aplicada da UniBH Vespasiano. Inscrições até 30/11.">
+<meta property="og:title" content="LANAP · Processo seletivo 2026.2">
+<meta property="og:description" content="Conheça a liga, leia o edital e faça sua inscrição até 30/11.">
+<meta property="og:image" content="https://batistazz.github.io/lanap/assets/logo-navy.png">
+<link rel="icon" href="assets/lanap-symbol-teal.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#1F334C; --navy-3:#132235; --teal:#0D767D; --tc:#5CC4C9; --papel:#FBF9F5; --linha:#D9D2C4; --texto:#2F3B48; --cinza:#6B7684;
+    --serif:"Source Serif 4", Georgia, serif; --sans:Inter, Arial, sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { min-height:100%; }
+  body { font:16px/1.65 var(--sans); color:var(--texto); background:var(--papel); -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  .rotulo { font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--teal); }
+  .no { width:10px; height:10px; border-radius:50%; border:1.5px solid var(--teal); display:inline-block; flex:none; }
+
+  /* ---------- Carregamento ---------- */
+  .carga { position:fixed; inset:0; z-index:80; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px;
+    background:radial-gradient(110% 80% at 70% 25%, #284462 0%, var(--navy) 55%, var(--navy-3) 100%); color:#fff; transition:opacity .6s, visibility .6s; }
+  .carga.sai { opacity:0; visibility:hidden; }
+  .carga img { width:min(46vw, 210px); opacity:0; animation:surge 1s .2s forwards; }
+  .carga svg { width:min(70vw, 300px); height:40px; overflow:visible; }
+  .carga .fio { stroke:rgba(255,255,255,.18); stroke-width:1.5; }
+  .carga .fio-on { stroke:var(--tc); stroke-width:1.5; stroke-dasharray:300; stroke-dashoffset:300; animation:corre 2s .3s ease-in-out forwards; }
+  .carga circle { fill:var(--navy); stroke:var(--tc); stroke-width:1.5; }
+  .carga circle.p { animation:acende .4s forwards; }
+  .carga .txt { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.6); }
+  .carga { overflow-y:auto; padding:30px 22px; }
+  .porta { width:min(100%, 420px); text-align:center; opacity:0; transform:translateY(16px); transition:opacity .7s, transform .7s; visibility:hidden; }
+  .porta.on { opacity:1; transform:none; visibility:visible; }
+  .porta h1 { font:500 clamp(28px, 7vw, 38px)/1.12 var(--serif); color:#fff; margin:0; }
+  .porta h1 i { color:var(--tc); font-weight:400; }
+  .porta .sub { margin-top:10px; color:rgba(255,255,255,.75); font-size:15px; }
+  .porta .caixa { margin-top:22px; text-align:left; border:1px solid rgba(92,196,201,.55); background:rgba(19,34,53,.55); }
+  .porta .caixa .u { padding:16px; font:14px/1.4 ui-monospace, Consolas, monospace; color:#fff; word-break:break-all; user-select:all; }
+  .porta .caixa .u.vazio { font-family:var(--sans); font-style:italic; color:#F2C48D; word-break:normal; }
+  .porta .caixa button { width:100%; padding:16px; border:0; background:var(--teal); color:#fff; font:600 16px var(--sans); cursor:pointer; }
+  .porta .caixa button.copiado { background:#2E8B57; }
+  .porta .dica { margin-top:12px; font-size:13.5px; color:rgba(255,255,255,.7); }
+  .porta .entra { margin-top:22px; width:100%; padding:15px; background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35); font:600 15px var(--sans); cursor:pointer; transition:opacity .3s, border-color .3s; }
+  .porta .entra:disabled { opacity:.35; cursor:not-allowed; }
+  .porta .entra:not(:disabled) { border-color:var(--tc); }
+  .porta .trava { margin-top:8px; font-size:12.5px; color:rgba(255,255,255,.55); }
+  .carga.aberta img { width:min(34vw, 150px); animation:none; opacity:1; transition:width .6s; }
+  .carga.aberta svg, .carga.aberta .txt { display:none; }
+  @keyframes surge { to { opacity:1; } }
+  @keyframes corre { to { stroke-dashoffset:0; } }
+  @keyframes acende { to { fill:var(--tc); } }
+
+  /* ---------- Estrutura ---------- */
+  .topo { background:var(--navy-3); color:#fff; }
+  .topo .in { max-width:720px; margin:0 auto; padding:0 22px; height:60px; display:flex; align-items:center; justify-content:space-between; }
+  .topo img { height:28px; }
+  .topo a { font-size:13px; color:rgba(255,255,255,.75); text-decoration:none; }
+  main { max-width:720px; margin:0 auto; padding:34px 22px 120px; }
+  .trilha { display:flex; align-items:center; gap:0; margin-bottom:34px; }
+  .trilha span { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:var(--cinza); white-space:nowrap; }
+  .trilha i { flex:1; height:1px; background:var(--linha); margin:0 10px; min-width:16px; }
+  .trilha .on { color:var(--navy); }
+  .trilha .on .no { background:var(--teal); }
+  .trilha .ok .no { background:var(--teal); border-color:var(--teal); }
+
+  .etapa { display:none; animation:entra .5s ease; }
+  .etapa.on { display:block; }
+  @keyframes entra { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  h1 { font:500 clamp(32px, 6.4vw, 48px)/1.08 var(--serif); color:var(--navy); letter-spacing:-.01em; margin-top:10px; }
+  h1 i { color:var(--teal); font-weight:400; }
+  .chapeu { font:clamp(18px, 3.6vw, 21px)/1.5 var(--serif); color:var(--navy); opacity:.9; margin-top:16px; }
+
+  .nucleos { list-style:none; margin-top:30px; border-top:1px solid var(--navy); }
+  .nucleos li { display:grid; grid-template-columns:28px 1fr; gap:12px; padding:16px 0; border-bottom:1px solid var(--linha); }
+  .nucleos .n { font:15px var(--serif); color:var(--teal); padding-top:2px; }
+  .nucleos h3 { font:500 20px/1.25 var(--serif); color:var(--navy); }
+  .nucleos p { font-size:14.5px; color:var(--cinza); margin-top:2px; }
+
+  .destaque { margin-top:30px; padding:22px 22px 20px; background:var(--navy); color:#fff; position:relative; overflow:hidden; }
+  .destaque .rotulo { color:var(--tc); }
+  .destaque b { display:block; font:500 clamp(40px, 9vw, 58px)/1 var(--serif); margin-top:10px; }
+  .destaque p { margin-top:8px; color:rgba(255,255,255,.85); font-size:15px; }
+  .destaque img { position:absolute; right:-30px; bottom:-30px; width:160px; opacity:.08; }
+
+  .acoes { display:flex; flex-direction:column; gap:10px; margin-top:30px; }
+  .btn { display:flex; align-items:center; justify-content:center; gap:10px; padding:16px 20px; font:600 15px var(--sans); text-decoration:none; border:1px solid var(--teal); color:var(--navy); background:#fff; cursor:pointer; width:100%; }
+  .btn.cheio { background:var(--teal); color:#fff; }
+  .btn:disabled, .btn[aria-disabled=true] { opacity:.4; cursor:not-allowed; pointer-events:none; }
+  .btn:focus-visible, .copia button:focus-visible, .marca input:focus-visible { outline:3px solid var(--tc); outline-offset:3px; }
+
+  .lembrete { margin-top:26px; padding:20px; border:1px solid var(--linha); background:#fff; }
+  .lembrete ul { list-style:none; margin-top:12px; }
+  .lembrete li { display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--linha); }
+  .lembrete li:last-child { border:0; }
+  .lembrete li .no { background:var(--teal); }
+  .prazo { display:inline-block; margin-top:14px; font-weight:600; color:var(--navy); }
+  .marca { display:flex; gap:12px; align-items:flex-start; margin-top:22px; font-size:15px; cursor:pointer; }
+  .marca input { width:22px; height:22px; accent-color:var(--teal); flex:none; margin-top:1px; }
+
+  .copia { margin-top:26px; border:1px solid var(--navy); background:#fff; }
+  .copia .url { padding:18px; font:15px/1.4 ui-monospace, Consolas, monospace; color:var(--navy); word-break:break-all; user-select:all; }
+  .copia .url.vazio { color:#B5651D; font-family:var(--sans); font-style:italic; word-break:normal; }
+  .copia button { width:100%; padding:16px; border:0; border-top:1px solid var(--navy); background:var(--navy); color:#fff; font:600 15px var(--sans); cursor:pointer; }
+  .copia button.copiado { background:var(--teal); }
+  .passos { list-style:none; margin-top:26px; counter-reset:p; }
+  .passos li { counter-increment:p; display:grid; grid-template-columns:34px 1fr; gap:10px; padding:12px 0; border-bottom:1px solid var(--linha); }
+  .passos li::before { content:counter(p); width:26px; height:26px; border-radius:50%; background:var(--teal); color:#fff; font:600 13px/26px var(--sans); text-align:center; }
+  .alerta { margin-top:22px; padding:14px 16px; border-left:3px solid var(--teal); background:#EAF4F3; font-size:14.5px; }
+  .alerta.forte { border-color:#B5651D; background:#FFF6EA; }
+  .rodape { margin-top:48px; padding-top:18px; border-top:1px solid var(--linha); font-size:13px; color:var(--cinza); }
+  @media (prefers-reduced-motion:reduce) { .carga { display:none; } .etapa { animation:none; } }
+</style>
+</head>
+<body>
+
+<!-- Carregamento -->
+<div class="carga" aria-hidden="true">
+  <img src="assets/logo-white.png" alt="">
+  <svg viewBox="0 0 300 40"><line class="fio" x1="10" y1="20" x2="290" y2="20"/><line class="fio-on" x1="10" y1="20" x2="290" y2="20"/>
+    <circle cx="10" cy="20" r="5" class="p" style="animation-delay:.3s"/><circle cx="103" cy="20" r="5" class="p" style="animation-delay:.95s"/>
+    <circle cx="196" cy="20" r="5" class="p" style="animation-delay:1.6s"/><circle cx="290" cy="20" r="5" class="p" style="animation-delay:2.2s"/></svg>
+  <span class="txt">Processo seletivo 2026.2</span>
+  <div class="porta" aria-hidden="false">
+    <h1>Processo seletivo <i>2026.2</i></h1>
+    <p class="sub" data-prazo-porta></p>
+    <div class="caixa">
+      <div class="u" data-url-porta></div>
+      <button type="button" data-copiar-porta>Copiar link de inscrição</button>
+    </div>
+    <p class="dica">Cole no <b>Chrome</b> ou no <b>Safari</b>: o formulário pede login Google para enviar os arquivos.</p>
+    <button class="entra" type="button" data-entra disabled>Conhecer a LANAP →</button>
+    <p class="trava" data-trava>Copie o link para continuar.</p>
+  </div>
+</div>
+
+<header class="topo"><div class="in"><a href="index.html"><img src="assets/logo-white.png" alt="LANAP"></a><a href="index.html">Conhecer o site →</a></div></header>
+
+<main>
+  <nav class="trilha" aria-label="Etapas">
+    <span data-t="1"><span class="no"></span>Conheça</span><i></i>
+    <span data-t="2"><span class="no"></span>Edital</span><i></i>
+    <span data-t="3"><span class="no"></span>Inscrição</span>
+  </nav>
+
+  <!-- 1. Conheça a LANAP -->
+  <section class="etapa" data-e="1">
+    <span class="rotulo">Antes de se inscrever</span>
+    <h1>Conheça a <i>LANAP</i></h1>
+    <p class="chapeu">A Liga Acadêmica de Neurociência Aplicada é a liga de neurociência do curso de Medicina da UniBH Vespasiano: formação, prática, pesquisa e comunidade.</p>
+
+    <ol class="nucleos">
+      <li><span class="n">01</span><div><h3>Programa Formativo</h3><p>Aulas e discussões sobre as bases da neurociência, com docentes da instituição.</p></div></li>
+      <li><span class="n">02</span><div><h3>Programa Imersivo</h3><p>Preparação para a prática, como a paramentação cirúrgica, rumo a vivências supervisionadas.</p></div></li>
+      <li><span class="n">03</span><div><h3>Produção Científica</h3><p>Grupos que partem de uma pergunta, leem criticamente as evidências e produzem trabalhos com orientação docente.</p></div></li>
+      <li><span class="n">04</span><div><h3>Núcleo Cultural</h3><p>A ciência da liga em diálogo com a comunidade.</p></div></li>
+    </ol>
+
+    <div class="destaque">
+      <span class="rotulo">Produção científica · 2026</span>
+      <b>4 trabalhos</b>
+      <p>aprovados para apresentação no IV Encontro em Neurociências da UFMG, todos de ligantes da LANAP.</p>
+      <img src="assets/lanap-symbol-white.svg" alt="">
+    </div>
+
+    <div class="acoes">
+      <button class="btn cheio" type="button" data-ir="2">Continuar para a inscrição →</button>
+      <a class="btn" href="index.html">Explorar o site da LANAP</a>
+    </div>
+  </section>
+
+  <!-- 2. Edital -->
+  <section class="etapa" data-e="2">
+    <span class="rotulo">Passo importante</span>
+    <h1>Não se esqueça de <i>ler o edital</i></h1>
+    <p class="chapeu">Ele explica quem pode participar, o que enviar e como será a avaliação.</p>
+
+    <div class="lembrete">
+      <span class="rotulo">O que você vai enviar</span>
+      <ul data-itens></ul>
+      <span class="prazo" data-prazo></span>
+    </div>
+
+    <div class="acoes">
+      <button class="btn" type="button" data-edital>Abrir o edital</button>
+    </div>
+
+    <label class="marca"><input type="checkbox" data-li> <span>Li o edital e estou de acordo com as regras do processo seletivo.</span></label>
+
+    <div class="acoes">
+      <button class="btn cheio" type="button" data-ir="3" data-precisa disabled>Ver o link de inscrição →</button>
+      <button class="btn" type="button" data-ir="1">← Voltar</button>
+    </div>
+  </section>
+
+  <!-- 3. Link -->
+  <section class="etapa" data-e="3">
+    <span class="rotulo">Último passo</span>
+    <h1>Copie o link e abra <i>no navegador</i></h1>
+    <p class="chapeu">O formulário pede login com uma conta Google para enviar os arquivos. Dentro do WhatsApp ou do Instagram isso costuma falhar.</p>
+
+    <div class="copia">
+      <div class="url" data-url></div>
+      <button type="button" data-copiar>Copiar link</button>
+    </div>
+
+    <ol class="passos">
+      <li><span>Toque em <b>Copiar link</b>.</span></li>
+      <li><span>Abra o <b>Chrome</b> ou o <b>Safari</b>.</span></li>
+      <li><span>Cole o link na barra de endereço e entre com sua conta Google.</span></li>
+      <li><span>Anexe a carta de intenção e o currículo Lattes em PDF e envie.</span></li>
+    </ol>
+
+    <div class="alerta" data-prazo-alerta></div>
+
+    <div class="acoes">
+      <button class="btn" type="button" data-edital>Rever o edital</button>
+      <button class="btn" type="button" data-ir="2">← Voltar</button>
+    </div>
+
+    <p class="rodape">Dúvidas: <a href="mailto:fasehlanap@gmail.com">fasehlanap@gmail.com</a> · Instagram <a href="https://www.instagram.com/lanap.faseh/" target="_blank" rel="noopener">@lanap.faseh</a></p>
+  </section>
+</main>
+
+<script src="assets/edital.js"></script>
+<script>
+(function () {
+  var C = window.LANAP_SELECAO;
+  var etapas = document.querySelectorAll('.etapa'), trilha = document.querySelectorAll('.trilha [data-t]');
+  var atual = 1;
+  function vai(n) {
+    atual = n;
+    etapas.forEach(function (e) { e.classList.toggle('on', +e.dataset.e === n); });
+    trilha.forEach(function (t) { var k = +t.dataset.t; t.classList.toggle('on', k === n); t.classList.toggle('ok', k < n); });
+    scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  document.querySelector('[data-itens]').innerHTML = C.itens.map(function (i) { return '<li><span class="no"></span>' + i + '</li>'; }).join('');
+  document.querySelector('[data-prazo]').textContent = C.prazo;
+  document.querySelector('[data-prazo-alerta]').innerHTML = '<b>Prazo:</b> ' + C.prazo + '.';
+
+  var url = document.querySelector('[data-url]'), botao = document.querySelector('[data-copiar]');
+  if (C.formulario) { url.textContent = C.formulario; }
+  else { url.textContent = 'O link do formulário será liberado aqui na abertura das inscrições.'; url.classList.add('vazio'); botao.disabled = true; botao.style.opacity = .5; }
+
+  botao.addEventListener('click', function () {
+    function ok() { botao.textContent = 'Link copiado ✓'; botao.classList.add('copiado'); setTimeout(function () { botao.textContent = 'Copiar link'; botao.classList.remove('copiado'); }, 2600); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(C.formulario).then(ok, seleciona);
+    else seleciona();
+    function seleciona() { var r = document.createRange(); r.selectNodeContents(url); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); ok(); } catch (e) {} }
+  });
+
+  var li = document.querySelector('[data-li]'), precisa = document.querySelector('[data-precisa]');
+  li.addEventListener('change', function () { precisa.disabled = !li.checked; });
+  document.querySelectorAll('[data-ir]').forEach(function (b) { b.addEventListener('click', function () { vai(+b.dataset.ir); }); });
+  document.querySelectorAll('[data-edital]').forEach(function (b) { b.addEventListener('click', function () { window.LANAP_abreEdital(); }); });
+
+  var q = +(new URLSearchParams(location.search).get('etapa') || 0);
+  vai(q >= 1 && q <= 3 ? q : 1);
+  if (q === 3) { li.checked = true; precisa.disabled = false; }
+  // Porta de entrada: a tela inicial só sai depois que a pessoa copiar o link de inscrição.
+  var carga = document.querySelector('.carga'), porta = carga.querySelector('.porta');
+  var uP = carga.querySelector('[data-url-porta]'), bP = carga.querySelector('[data-copiar-porta]');
+  var entra = carga.querySelector('[data-entra]'), trava = carga.querySelector('[data-trava]');
+  carga.querySelector('[data-prazo-porta]').textContent = C.prazo;
+  if (C.formulario) uP.textContent = C.formulario;
+  else { uP.textContent = 'O link de inscrição será liberado aqui na abertura das inscrições.'; uP.classList.add('vazio'); bP.disabled = true; bP.style.opacity = .5; entra.disabled = false; trava.textContent = ''; }
+  function copiar(texto, alvo, feito) {
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(feito, manual); else manual();
+    function manual() { var r = document.createRange(); r.selectNodeContents(alvo); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} feito(); }
+  }
+  bP.addEventListener('click', function () {
+    copiar(C.formulario, uP, function () {
+      bP.textContent = 'Link copiado ✓'; bP.classList.add('copiado');
+      entra.disabled = false; trava.textContent = 'Link guardado. Antes de se inscrever, conheça a LANAP: levando você ao site…';
+      setTimeout(irAoSite, 2600);
+    });
+  });
+  function irAoSite() { location.href = 'index.html'; }
+  entra.addEventListener('click', irAoSite);
+  function abrePorta() { carga.classList.add('aberta'); porta.classList.add('on'); }
+  if (q) carga.classList.add('sai');
+  else if (matchMedia('(prefers-reduced-motion: reduce)').matches) abrePorta();
+  else setTimeout(abrePorta, 2900);
+})();
+</script>
+</body>
+</html>
